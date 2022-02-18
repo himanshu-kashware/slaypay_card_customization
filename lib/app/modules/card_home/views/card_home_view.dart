@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -51,28 +53,60 @@ class CardHomeView extends GetView<CardHomeController> {
           )
         ],
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+      body: Stack(
         children: [
-          Neumorphic(
-              style: NeumorphicStyle(
-                  shape: NeumorphicShape.concave,
-                  boxShape:
-                      NeumorphicBoxShape.roundRect(BorderRadius.circular(12)),
-                  depth: 8,
-                  lightSource: LightSource.topLeft,
-                  color: const Color(0xffF29791)),
-              child:  AspectRatio(
-                aspectRatio: 1.586,
-                child: SizedBox(
-                  child: Stack(
-                    children: [
+          Positioned.fill(
+            child: Image.asset(
+              Assets.imagesBackground,
+              repeat: ImageRepeat.repeat,
+              fit: BoxFit.cover,
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: Get.height / 5,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: Get.width / 20),
+                child: Neumorphic(
+                    style: NeumorphicStyle(
+                        shape: NeumorphicShape.concave,
+                        boxShape:
+                            NeumorphicBoxShape.roundRect(BorderRadius.circular(12)),
+                        depth: 8,
+                        lightSource: LightSource.topLeft,
+                        color: const Color(0xffF29791)),
+                    child: AspectRatio(
+                      aspectRatio: 1.586,
+                      child: SizedBox(
+                        child: Stack(
+                          children: [
 
+                          ],
+                        ),
+                      ),
+                    )),
+              )
+            ],
+          ),
 
-                    ],
-                  ),
-                ),
-              ))
+          Positioned(
+            right:10,
+            top: 24,
+            child: FloatingActionButton(
+              mini: true,
+              backgroundColor: const Color(0xff6F7FAF),
+              onPressed: () {
+
+                showCustomDialog();
+
+              },
+              child: SvgPicture.asset(Assets.imagesRemove),
+            ),
+          ),
         ],
       ),
     );
