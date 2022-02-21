@@ -33,6 +33,7 @@ class Assets {
   static const String imagesBlankCard = 'assets/images/blank_card.svg';
   static const String imagesBlock = 'assets/images/block.svg';
   static const String imagesCardColor = 'assets/images/card_color.svg';
+  static const String imagesChip = 'assets/images/chip.svg';
   static const String imagesClose = 'assets/images/close.svg';
   static const String imagesCo = 'assets/images/co.png';
   static const String imagesDuplicateIcon = 'assets/images/duplicate_icon.svg';
@@ -49,6 +50,7 @@ class Assets {
   static const String imagesTick = 'assets/images/tick.svg';
   static const String imagesUndo = 'assets/images/undo.png';
   static const String imagesUploadImage = 'assets/images/upload_image.svg';
+  static const String imagesVisa = 'assets/images/visa.svg';
   static const String patternsP0 = 'assets/images/patterns/p0.svg';
   static const String patternsP1 = 'assets/images/patterns/p1.svg';
   static const String patternsP10 = 'assets/images/patterns/p10.svg';
