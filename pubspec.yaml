@@ -39,6 +39,7 @@ dependencies:
   flutter_svg: ^1.0.3
   flutter_neumorphic: ^3.2.0
   flutter_staggered_animations: ^1.0.0
+  animated_item_picker: ^1.0.4
 
 dev_dependencies:
   flutter_test:
