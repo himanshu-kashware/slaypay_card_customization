@@ -1,2 +1,2 @@
 # slaypay_cc
- SlayPay Card CustomizaTION
+ SlayPay Card Customization
