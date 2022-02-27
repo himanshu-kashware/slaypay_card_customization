@@ -1,11 +1,12 @@
 
+import 'dart:ffi';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:slaypay_cc/generated/assets.dart';
 
-showCustomDialog() {
+showCustomDialog({required VoidCallback onTap}) {
   showDialog(
     context: Get.context!,
     builder: (context) => BackdropFilter(
@@ -82,7 +83,9 @@ showCustomDialog() {
                           ),
                         ),
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            onTap();
+                          },
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(5),
                             child: Container(

@@ -88,7 +88,7 @@ class CardHomeView extends GetView<CardHomeController> {
                               BorderRadius.circular(12)),
                           depth: 8,
                           lightSource: LightSource.topLeft,
-                          color: const Color(0xffFFD6D8)),
+                          color: controller.cardSelectedColor.value.color),
                       child: AspectRatio(
                         aspectRatio: 1.586,
                         child: SizedBox(
@@ -107,7 +107,11 @@ class CardHomeView extends GetView<CardHomeController> {
                 mini: true,
                 backgroundColor: const Color(0xff6F7FAF),
                 onPressed: () {
-                  showCustomDialog();
+                  showCustomDialog(onTap: () {
+                    controller.cardStack.value.clear();
+                    controller.addDefaultWidget();
+                    Get.back();
+                  });
                 },
                 child: SvgPicture.asset(Assets.imagesRemove),
               ),
@@ -134,7 +138,9 @@ class CardHomeView extends GetView<CardHomeController> {
                             title: 'Bg Color',
                           ),
                           MainMenuOptions(
-                            onTap: () {},
+                            onTap: () {
+                              controller.openPatternPallete();
+                            },
                             iconData: Icons.pattern,
                             title: 'Patterns',
                           ),
