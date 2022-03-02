@@ -6,6 +6,7 @@ CustomBottomSheet({required Widget customChild}){
 
   Get.bottomSheet(
       customChild,
+      persistent: true,
       enableDrag: false,
       barrierColor: Colors.transparent,
       backgroundColor: Colors.white,

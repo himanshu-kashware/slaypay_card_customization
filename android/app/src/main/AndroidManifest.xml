@@ -2,6 +2,7 @@
     package="com.slaypay_cc.slaypay_cc">
    <application
         android:label="slaypay_cc"
+       android:requestLegacyExternalStorage="true"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

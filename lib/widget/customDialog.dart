@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:slaypay_cc/generated/assets.dart';
 
@@ -107,7 +108,9 @@ showCustomDialog({required VoidCallback onTap}) {
                       ],
                     ),
                     const Spacer(),
-                  ]),
+
+
+              ]),
             ),
           ),
         ),

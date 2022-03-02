@@ -4,13 +4,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:slaypay_cc/app/modules/image/filters.dart';
 import 'package:slaypay_cc/constants/app_colors.dart';
 import 'package:slaypay_cc/generated/assets.dart';
 import 'package:slaypay_cc/util/color_detail.dart';
 import 'package:slaypay_cc/util/pattern_detail.dart';
+import 'package:slaypay_cc/widget/CustomSlider.dart';
 import 'package:slaypay_cc/widget/color_pallete.dart';
 import 'package:slaypay_cc/widget/custom_bottom_sheet_options.dart';
 import 'package:slaypay_cc/widget/pattern_pallete.dart';
+
+import '../../image/images/images_view.dart';
+
 
 class CardHomeController extends GetxController {
   final cardStack = RxList<Widget>().obs;
@@ -21,6 +27,17 @@ class CardHomeController extends GetxController {
 
   //=====================Card Pattern ==================================================
   final Rx<PatternDetail> cardSelectedPattern = PatternDetail(null, true).obs;
+  final patternOpacity = 1.0.obs;
+  final patternSize = 0.5.obs;
+
+  //======================Image Editable ==========================================
+
+  final isImageEditable=false.obs;
+  var imageAngle = 0.0.obs;
+  var blendColor = Colors.transparent.obs;
+  final showFilter=false.obs;
+  final selectedImage=''.obs;
+
 
   @override
   void onInit() {
@@ -54,28 +71,40 @@ class CardHomeController extends GetxController {
     cardStack.value.add(_visaView);
   }
 
-
-
   //=== Add Pattern==================================================
 
-  void addPattern(){
-    Widget _pattern =  SvgPicture.asset(
-      cardSelectedPattern.value.pattern_data!,
-     fit: BoxFit.fill,
-      );
+  void addPattern() {
+    Widget _pattern = Transform.scale(
+      scale: patternSize.value,
+      child: SvgPicture.asset(
+        cardSelectedPattern.value.pattern_data!,
+        fit: BoxFit.fill,
+        color: Colors.grey.withOpacity(patternOpacity.value),
+      ),
+    );
 
-
-
-    if(cardStack.value.length>2){
+    if (cardStack.value.length > 2) {
       cardStack.value.removeAt(0);
       cardStack.value.insert(0, _pattern);
-    }else{
+    } else {
       cardStack.value.insert(0, _pattern);
     }
-
   }
 
+  //=================================Add Image ========================
 
+  void addImage({required String image}) {
+    Widget _pattern = ImagesComponent(image: image);
+    if (cardStack.value.length > 2) {
+      cardStack.value.removeAt(0);
+      cardStack.value.insert(0, _pattern);
+    } else {
+      cardStack.value.insert(0, _pattern);
+    }
+    isImageEditable(true);
+    Get.back();
+
+  }
 
   //==================================================================================
   void openColorPallete() {
@@ -109,19 +138,21 @@ class CardHomeController extends GetxController {
     );
   }
 
-
   //================================================================================
-  void openPatternPallete() {
+  void openPatternPallete(
+      {required double opacityValue,
+      required double sizeValue,
+      required Function(double) onSizeChange,
+      required Function(double) onOpacityChange}) {
+    final opacity = 0.0.obs;
+    final size = 0.0.obs;
+
+    opacity.value = opacityValue;
+    size.value = sizeValue;
     CustomBottomSheet(
-      customChild: Stack(
-        alignment: Alignment.topCenter,
+      customChild: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          PatternPallete(
-              preFilledPattern: cardSelectedPattern.value,
-              selectedPattern: (PatternDetail patternDetail) {
-                cardSelectedPattern.value = patternDetail;
-                addPattern();
-              }),
           ClipOval(
             child: Material(
               color: AppColors.accentColor, // Button color
@@ -135,8 +166,166 @@ class CardHomeController extends GetxController {
               ),
             ),
           ),
+          Obx(() {
+            return Row(
+              children: [
+                CustomSlider(
+                  title: "OPACITY",
+                  value: opacity.value,
+                  max: 1,
+                  onChanged: (value) {
+                    onOpacityChange(value);
+                    opacity.value = value;
+                    addPattern();
+                  },
+                ),
+                CustomSlider(
+                  title: "SIZE",
+                  max: 2,
+                  value: size.value,
+                  onChanged: (value) {
+                    onSizeChange(value);
+                    size.value = value;
+                    addPattern();
+                  },
+                ),
+              ],
+            );
+          }),
+          PatternPallete(
+              preFilledPattern: cardSelectedPattern.value,
+              selectedPattern: (PatternDetail patternDetail) {
+                cardSelectedPattern.value = patternDetail;
+                addPattern();
+              }),
         ],
       ),
     );
   }
+
+  //========================================Open Image Pallete =====================================
+
+  void openImagePallete() {
+    CustomBottomSheet(
+      customChild: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ClipOval(
+            child: Material(
+              color: AppColors.accentColor, // Button color
+              child: InkWell(
+                splashColor: AppColors.accentColor, // Splash color
+                onTap: () {
+                  Get.back();
+                },
+                child: const SizedBox(
+                    width: 25, height: 25, child: Icon(Icons.clear)),
+              ),
+            ),
+          ),
+          SizedBox(
+            width: Get.width,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text("Choose your image :"),
+                ),
+                GestureDetector(
+                  onTap: () async {
+                    final ImagePicker _picker = ImagePicker();
+
+                    final XFile? image =
+                        await _picker.pickImage(source: ImageSource.gallery);
+
+                    if (image != null) {
+                      imageAngle.value=0;
+                      blendColor.value= Colors.transparent;
+                      addImage(image: image.path);
+                    }
+
+                   selectedImage.value =image!.path;
+                    // homeController.isSheetOpen.value = false;
+                    // Get.back();
+                    // homeController.bottomNavVisible.value = false;
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: 70,
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        boxShadow: [
+                          BoxShadow(
+                            offset: const Offset(0, 3),
+                            blurRadius: 6,
+                            color: const Color(0xff000000).withOpacity(0.19),
+                          ),
+                        ],
+                        color: AppColors.accentColor,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColors.white,
+                            ),
+                            child: SvgPicture.asset(Assets.imagesUploadImage),
+                          ),
+                          const SizedBox(height: 8),
+                          const FittedBox(
+                            child: Text(
+                              "Upload Picture",
+                              style: TextStyle(
+                                  fontSize: 12, color: AppColors.white),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+//==============================Open Filter Dialog ========================================
+  void openFilterDialog() {
+    CustomBottomSheet(
+      customChild: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ClipOval(
+            child: Material(
+              color: AppColors.accentColor, // Button color
+              child: InkWell(
+                splashColor: AppColors.accentColor, // Splash color
+                onTap: () {
+                  Get.back();
+                },
+                child: const SizedBox(
+                    width: 25, height: 25, child: Icon(Icons.clear)),
+              ),
+            ),
+          ),
+          SizedBox(
+              height: 70,
+              child: MakeFilter(image: selectedImage.value,onFilterSelected: (color){
+                blendColor.value=color;
+
+              },))
+        ],
+      ),
+    );
+  }
+
+
 }
