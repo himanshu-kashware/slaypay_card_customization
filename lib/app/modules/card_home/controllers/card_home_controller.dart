@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:slaypay_cc/app/modules/image/filters.dart';
 import 'package:slaypay_cc/constants/app_colors.dart';
@@ -14,9 +15,12 @@ import 'package:slaypay_cc/widget/CustomSlider.dart';
 import 'package:slaypay_cc/widget/color_pallete.dart';
 import 'package:slaypay_cc/widget/custom_bottom_sheet_options.dart';
 import 'package:slaypay_cc/widget/pattern_pallete.dart';
+import 'package:slaypay_cc/widget/text_properties.dart';
 
+import '../../../../widget/resizeable_text.dart';
+import '../../../../widget/text_sizer.dart';
 import '../../image/images/images_view.dart';
-
+import '../../text_editor/text_editor.dart';
 
 class CardHomeController extends GetxController {
   final cardStack = RxList<Widget>().obs;
@@ -32,17 +36,75 @@ class CardHomeController extends GetxController {
 
   //======================Image Editable ==========================================
 
-  final isImageEditable=false.obs;
+  final isImageEditable = false.obs;
   var imageAngle = 0.0.obs;
   var blendColor = Colors.transparent.obs;
-  final showFilter=false.obs;
-  final selectedImage=''.obs;
+  final showFilter = false.obs;
+  final selectedImage = ''.obs;
 
+//=====================================Text Fields ======================================
+
+  final textLists = RxList<List<TextProperties>>().obs;
 
   @override
   void onInit() {
     addDefaultWidget();
     super.onInit();
+  }
+
+  final fonts = [
+    'OpenSans',
+    'Billabong',
+    'GrandHotel',
+    'Oswald',
+    'Quicksand',
+    'BeautifulPeople',
+    'BeautyMountains',
+    'BiteChocolate',
+    'BlackberryJam',
+    'BunchBlossoms',
+    'CinderelaRegular',
+    'Countryside',
+    'Halimun',
+    'LemonJelly',
+    'QuiteMagicalRegular',
+    'Tomatoes',
+    'TropicalAsianDemoRegular',
+    'VeganStyle',
+  ];
+
+  RxString _text = 'Ankit'.obs;
+  TextStyle _textStyle = const TextStyle(
+    // fontSize: 25,
+    color: Colors.black,
+    fontFamily: 'Billabong',
+  );
+  TextAlign _textAlign = TextAlign.center;
+
+  addTextWidget(){
+    showBlank(true);
+
+
+
+    cardStack.value.add(TextEditor(
+      fonts: fonts,
+      text: _text.value,
+      textStyle: _textStyle,
+      textAlingment: _textAlign,
+      minFontSize: 12,
+      onEditCompleted: (style, align, text) {
+
+          _text.value = text;
+          _textStyle = style;
+          _textAlign = align;
+
+        isDone(true);
+
+      },
+    ),);
+
+
+
   }
 
   @override
@@ -103,7 +165,6 @@ class CardHomeController extends GetxController {
     }
     isImageEditable(true);
     Get.back();
-
   }
 
   //==================================================================================
@@ -240,12 +301,12 @@ class CardHomeController extends GetxController {
                         await _picker.pickImage(source: ImageSource.gallery);
 
                     if (image != null) {
-                      imageAngle.value=0;
-                      blendColor.value= Colors.transparent;
+                      imageAngle.value = 0;
+                      blendColor.value = Colors.transparent;
                       addImage(image: image.path);
                     }
 
-                   selectedImage.value =image!.path;
+                    selectedImage.value = image!.path;
                     // homeController.isSheetOpen.value = false;
                     // Get.back();
                     // homeController.bottomNavVisible.value = false;
@@ -297,6 +358,7 @@ class CardHomeController extends GetxController {
       ),
     );
   }
+
 //==============================Open Filter Dialog ========================================
   void openFilterDialog() {
     CustomBottomSheet(
@@ -318,14 +380,14 @@ class CardHomeController extends GetxController {
           ),
           SizedBox(
               height: 70,
-              child: MakeFilter(image: selectedImage.value,onFilterSelected: (color){
-                blendColor.value=color;
-
-              },))
+              child: MakeFilter(
+                image: selectedImage.value,
+                onFilterSelected: (color) {
+                  blendColor.value = color;
+                },
+              ))
         ],
       ),
     );
   }
-
-
 }

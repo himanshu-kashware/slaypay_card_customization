@@ -8,6 +8,7 @@ import 'package:slaypay_cc/widget/show_animated_bottom_sheet.dart';
 import 'package:slaypay_cc/widget/customDialog.dart';
 import 'package:slaypay_cc/widget/main_menu_options.dart';
 
+import '../../../../widget/text_sizer.dart';
 import '../controllers/card_home_controller.dart';
 
 class CardHomeView extends GetView<CardHomeController> {
@@ -207,7 +208,10 @@ class CardHomeView extends GetView<CardHomeController> {
                                   title: 'Image',
                                 ),
                                 MainMenuOptions(
-                                  onTap: () {},
+                                  onTap: () {
+
+                                 controller.addTextWidget();
+                                  },
                                   iconData: Icons.font_download_outlined,
                                   title: 'Add Text',
                                 ),
