@@ -1,9 +1,10 @@
+import 'package:auto_size_text_field/auto_size_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:slaypay_cc/widget/flutter_text_widget/resizable_widget.dart';
 import 'package:slaypay_cc/widget/flutter_text_widget/resizable_widget_controller.dart';
 
-const double dragWidgetSize = 30;
+const double dragWidgetSize = 20;
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -17,17 +18,15 @@ class HomePage extends StatelessWidget {
         initialPosition: Offset(areaWidth / 2, areaHeight / 2),
         areaHeight: areaHeight,
         areaWidth: areaWidth,
-        height: areaHeight / 2,
-        width: areaWidth / 2,
+        height: areaHeight / 4,
+        width: areaWidth / 4,
         minWidth: 50,
         minHeight: 50,
       ),
     );
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Resizable Widget'),
-      ),
+
       body: LayoutBuilder(builder: (context, constraint) {
         return Container(
           width: constraint.maxWidth,
@@ -61,6 +60,15 @@ class HomePage extends StatelessWidget {
                     border: Border.all(
                       color: Colors.white,
                     ),
+                  ),
+                  child: AutoSizeTextField(
+                    autofocus: true,
+                    maxLines: null,
+                    maxFontSize: 24,
+                    decoration: const InputDecoration(
+                      border: InputBorder.none
+                    ),
+                    controller: TextEditingController(),
                   ),
                 ),
               ),
