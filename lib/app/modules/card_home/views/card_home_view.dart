@@ -154,6 +154,7 @@ class CardHomeView extends GetView<CardHomeController> {
                     controller.cardStack.value.clear();
                     controller.addDefaultWidget();
                     Get.back();
+
                   });
                 },
                 child: SvgPicture.asset(Assets.imagesRemove),

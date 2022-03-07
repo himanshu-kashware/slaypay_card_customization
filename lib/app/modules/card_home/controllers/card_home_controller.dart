@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
@@ -5,8 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:slaypay_cc/app/modules/image/filters.dart';
+
 import 'package:slaypay_cc/constants/app_colors.dart';
 import 'package:slaypay_cc/generated/assets.dart';
 import 'package:slaypay_cc/util/color_detail.dart';
@@ -14,20 +18,21 @@ import 'package:slaypay_cc/util/pattern_detail.dart';
 import 'package:slaypay_cc/widget/CustomSlider.dart';
 import 'package:slaypay_cc/widget/color_pallete.dart';
 import 'package:slaypay_cc/widget/custom_bottom_sheet_options.dart';
+import 'package:slaypay_cc/widget/flutter_text_widget/test.dart';
 import 'package:slaypay_cc/widget/pattern_pallete.dart';
 import 'package:slaypay_cc/widget/text_properties.dart';
 
-import '../../../../widget/resizeable_text.dart';
-import '../../../../widget/text_sizer.dart';
+
+
 import '../../image/images/images_view.dart';
-import '../../text_editor/text_editor.dart';
+
 
 class CardHomeController extends GetxController {
   final cardStack = RxList<Widget>().obs;
 
   //=====================Card Color ==================================================
   final Rx<ColorDetail> cardSelectedColor =
-      ColorDetail.name(true, Colors.green).obs;
+      ColorDetail.name(true,AppColors.accentColor).obs;
 
   //=====================Card Pattern ==================================================
   final Rx<PatternDetail> cardSelectedPattern = PatternDetail(null, true).obs;
@@ -73,38 +78,10 @@ class CardHomeController extends GetxController {
     'VeganStyle',
   ];
 
-  RxString _text = 'Ankit'.obs;
-  TextStyle _textStyle = const TextStyle(
-    // fontSize: 25,
-    color: Colors.black,
-    fontFamily: 'Billabong',
-  );
-  TextAlign _textAlign = TextAlign.center;
+  addTextWidget() async {
+ //cardStack.value.add( ResizebleWidget(child: TextField(autofocus: true,),));
 
-  addTextWidget(){
-    showBlank(true);
-
-
-
-    cardStack.value.add(TextEditor(
-      fonts: fonts,
-      text: _text.value,
-      textStyle: _textStyle,
-      textAlingment: _textAlign,
-      minFontSize: 12,
-      onEditCompleted: (style, align, text) {
-
-          _text.value = text;
-          _textStyle = style;
-          _textAlign = align;
-
-        isDone(true);
-
-      },
-    ),);
-
-
-
+    Get.to(HomePage());
   }
 
   @override
@@ -302,7 +279,7 @@ class CardHomeController extends GetxController {
 
                     if (image != null) {
                       imageAngle.value = 0;
-                      blendColor.value = Colors.transparent;
+                      blendColor.value = AppColors.accentColor;
                       addImage(image: image.path);
                     }
 

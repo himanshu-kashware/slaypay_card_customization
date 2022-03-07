@@ -20,46 +20,43 @@ class CustomSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(4.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 24.0, top: 6),
-            child: Text(
-              title,
-              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 24.0, top: 6),
+          child: Text(
+            title,
+            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
           ),
-          SfSlider(
-            min: 0.0,
-            max: max,
-            activeColor: AppColors.accentColor,
-            inactiveColor: const Color(0x20707070),
-            value: value,
-            thumbIcon: FittedBox(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                // child: Icon(
-                //   Icons.arrow_forward_ios_rounded,
-                //   color: AppColors.white,
-                // ),
-                child: Center(
-                  child: SvgPicture.asset(
-                    "assets/images/arrow_right.svg",
-                    color: Colors.white,
-                    height: 20,
-                  ),
+        ),
+        SfSlider(
+          min: 0.0,
+          max: max,
+          activeColor: AppColors.accentColor,
+          inactiveColor: const Color(0x20707070),
+          value: value,
+          thumbIcon: FittedBox(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              // child: Icon(
+              //   Icons.arrow_forward_ios_rounded,
+              //   color: AppColors.white,
+              // ),
+              child: Center(
+                child: SvgPicture.asset(
+                  "assets/images/arrow_right.svg",
+                  color: Colors.white,
+                  height: 20,
                 ),
               ),
             ),
-            minorTicksPerInterval: 1,
-            onChanged: onChanged,
-          )
-        ],
-      ),
+          ),
+          minorTicksPerInterval: 1,
+          onChanged: onChanged,
+        )
+      ],
     );
   }
 }
