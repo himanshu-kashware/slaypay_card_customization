@@ -26,7 +26,6 @@ class HomePage extends StatelessWidget {
     );
 
     return Scaffold(
-
       body: LayoutBuilder(builder: (context, constraint) {
         return Container(
           width: constraint.maxWidth,
@@ -64,10 +63,10 @@ class HomePage extends StatelessWidget {
                   child: AutoSizeTextField(
                     autofocus: true,
                     maxLines: null,
-                    maxFontSize: 24,
-                    decoration: const InputDecoration(
-                      border: InputBorder.none
-                    ),
+                    minFontSize: 40,
+                    expands: true,
+                    scrollPhysics: NeverScrollableScrollPhysics(),
+                    decoration: const InputDecoration(border: InputBorder.none),
                     controller: TextEditingController(),
                   ),
                 ),

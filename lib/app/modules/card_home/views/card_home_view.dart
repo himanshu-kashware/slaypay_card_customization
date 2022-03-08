@@ -23,6 +23,7 @@ class CardHomeView extends GetView<CardHomeController> {
         toolbarHeight: 66,
         backgroundColor: AppColors.white,
         title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             SvgPicture.asset(
               Assets.imagesLogo,
@@ -30,6 +31,28 @@ class CardHomeView extends GetView<CardHomeController> {
               height: 33,
               width: 40,
             ),
+            Obx(() {
+              return Row(
+                children: [
+                  GestureDetector(onTap: () {
+                    controller.undo();
+                  }, child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(Icons.undo, color: controller.undoList.value
+                        .isNotEmpty ? Colors.black : Colors.black.withOpacity(
+                        0.5),),
+                  )),
+                  GestureDetector(onTap: () {
+                    controller.redo();
+                  }, child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(Icons.redo, color: controller.redoList.value
+                        .isNotEmpty ? Colors.black : Colors.black.withOpacity(
+                        0.5),),
+                  ))
+                ],
+              );
+            })
           ],
         ),
         actions: [
@@ -58,173 +81,176 @@ class CardHomeView extends GetView<CardHomeController> {
         ],
       ),
       body: Obx(() {
-        return Stack(
-          children: [
-            Positioned.fill(
-              child: Image.asset(
-                Assets.imagesBackground,
-                repeat: ImageRepeat.repeat,
-                fit: BoxFit.cover,
+        return SafeArea(
+          bottom: false,
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: Image.asset(
+                  Assets.imagesBackground,
+                  repeat: ImageRepeat.repeat,
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: Get.height / 5,
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: Get.width / 20),
-                  child: Neumorphic(
-                      style: NeumorphicStyle(
-                          shape: NeumorphicShape.concave,
-                          boxShape: NeumorphicBoxShape.roundRect(
-                              BorderRadius.circular(12)),
-                          depth: 8,
-                          lightSource: LightSource.topLeft,
-                          color: controller.cardSelectedColor.value.color),
-                      child: AspectRatio(
-                        aspectRatio: 1.586,
-                        child: SizedBox(
-                          child: Stack(
-                            children: controller.cardStack.value,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: Get.height / 5,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: Get.width / 20),
+                    child: Neumorphic(
+                        style: NeumorphicStyle(
+                            shape: NeumorphicShape.concave,
+                            boxShape: NeumorphicBoxShape.roundRect(
+                                BorderRadius.circular(12)),
+                            depth: 8,
+                            lightSource: LightSource.topLeft,
+                            color: controller.cardSelectedColor.value.color),
+                        child: AspectRatio(
+                          aspectRatio: 1.586,
+                          child: SizedBox(
+                            child: Stack(
+                              children: controller.cardStack.value,
+                            ),
                           ),
+                        )),
+                  ),
+                  controller.isImageEditable.value
+                      ? SizedBox(
+                    width: Get.width,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const SizedBox(
+                          height: 60,
                         ),
-                      )),
-                ),
-                controller.isImageEditable.value
-                    ? SizedBox(
-                        width: Get.width,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                        Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const SizedBox(
-                              height: 60,
+                            GestureDetector(
+                              onTap: () {
+                                controller.cardStack.value.removeAt(0);
+                                controller.isImageEditable.value = false;
+                              },
+                              child: const CircleAvatar(
+                                  backgroundColor: Colors.red,
+                                  child: Icon(
+                                    Icons.close,
+                                    color: Colors.white,
+                                    size: 40,
+                                  )),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    controller.cardStack.value.removeAt(0);
-                                    controller.isImageEditable.value=false;
-                                  },
-                                  child: const CircleAvatar(
-                                      backgroundColor: Colors.red,
-                                      child: Icon(
-                                        Icons.close,
-                                        color: Colors.white,
-                                        size: 40,
-                                      )),
-                                ),
-                                const SizedBox(
-                                  width: 40,
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    controller.isImageEditable.value=false;
-                                    controller.openFilterDialog();
-                                  },
-                                  child: const CircleAvatar(
-                                      backgroundColor: Colors.green,
-                                      child: Icon(
-                                        Icons.check_rounded,
-                                        color: Colors.white,
-                                        size: 40,
-                                      )),
-                                )
-                              ],
+                            const SizedBox(
+                              width: 40,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                controller.isImageEditable.value = false;
+                                controller.openFilterDialog();
+                              },
+                              child: const CircleAvatar(
+                                  backgroundColor: Colors.green,
+                                  child: Icon(
+                                    Icons.check_rounded,
+                                    color: Colors.white,
+                                    size: 40,
+                                  )),
                             )
                           ],
-                        ),
-                      )
-                    : const SizedBox()
-              ],
-            ),
-            Positioned(
-              right: 10,
-              top: 24,
-              child: FloatingActionButton(
-                mini: true,
-                backgroundColor: const Color(0xff6F7FAF),
-                onPressed: () {
-                  showCustomDialog(onTap: () {
-                    controller.cardStack.value.clear();
-                    controller.addDefaultWidget();
-                    Get.back();
-
-                  });
-                },
-                child: SvgPicture.asset(Assets.imagesRemove),
+                        )
+                      ],
+                    ),
+                  )
+                      : const SizedBox()
+                ],
               ),
-            ),
-
-
-            !controller.isImageEditable.value
-                ? Positioned(
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    child: showAnimatedBottomSheet(
-                      childWidget: IntrinsicWidth(
-                        child: AnimatedContainer(
-                          duration: const Duration(seconds: 1),
-                          color: Colors.white,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 15.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                MainMenuOptions(
-                                  onTap: () {
-                                    controller.openColorPallete();
-                                  },
-                                  iconData: Icons.color_lens_rounded,
-                                  title: 'Bg Color',
-                                ),
-                                MainMenuOptions(
-                                  onTap: () {
-                                    controller.openPatternPallete(
-                                        opacityValue:
-                                            controller.patternOpacity.value,
-                                        sizeValue: controller.patternSize.value,
-                                        onOpacityChange: (double value) {
-                                          controller.patternOpacity.value =
-                                              value;
-                                        },
-                                        onSizeChange: (double value) {
-                                          controller.patternSize.value = value;
-                                        });
-                                  },
-                                  iconData: Icons.pattern,
-                                  title: 'Patterns',
-                                ),
-                                MainMenuOptions(
-                                  onTap: () {
-                                    controller.openImagePallete();
-                                  },
-                                  iconData: Icons.image,
-                                  title: 'Image',
-                                ),
-                                MainMenuOptions(
-                                  onTap: () {
-
-                                 controller.addTextWidget();
-                                  },
-                                  iconData: Icons.font_download_outlined,
-                                  title: 'Add Text',
-                                ),
-                              ],
+              Positioned(
+                right: 10,
+                top: 24,
+                child: FloatingActionButton(
+                  mini: true,
+                  backgroundColor: const Color(0xff6F7FAF),
+                  onPressed: () {
+                    showCustomDialog(onTap: () {
+                      controller.cardStack.value.clear();
+                      controller.addDefaultWidget();
+                      Get.back();
+                    });
+                  },
+                  child: SvgPicture.asset(Assets.imagesRemove),
+                ),
+              ),
+              !controller.isImageEditable.value
+                  ? Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: showAnimatedBottomSheet(
+                  childWidget: IntrinsicWidth(
+                    child: AnimatedContainer(
+                      duration: const Duration(seconds: 1),
+                      color: Colors.white,
+                      child: Padding(
+                        padding:
+                        const EdgeInsets.symmetric(vertical: 15.0),
+                        child: Row(
+                          mainAxisAlignment:
+                          MainAxisAlignment.spaceEvenly,
+                          children: [
+                            MainMenuOptions(
+                              onTap: () {
+                                controller.openColorPallete();
+                              },
+                              iconData: Icons.color_lens_rounded,
+                              title: 'Bg Color',
                             ),
-                          ),
+                            MainMenuOptions(
+                              onTap: () {
+                                controller.openPatternPallete(
+                                    opacityValue:
+                                    controller.patternOpacity.value,
+                                    sizeValue:
+                                    controller.patternSize.value,
+                                    onOpacityChange: (double value) {
+                                      controller.patternOpacity.value =
+                                          value;
+                                    },
+                                    onSizeChange: (double value) {
+                                      controller.patternSize.value =
+                                          value;
+                                    });
+                              },
+                              iconData: Icons.pattern,
+                              title: 'Patterns',
+                            ),
+                            MainMenuOptions(
+                              onTap: () {
+                                controller.openImagePallete();
+                              },
+                              iconData: Icons.image,
+                              title: 'Image',
+                            ),
+                            MainMenuOptions(
+                              onTap: () {
+                                controller.addTextWidget();
+                              },
+                              iconData: Icons.font_download_outlined,
+                              title: 'Add Text',
+                            ),
+                          ],
                         ),
                       ),
                     ),
-                  )
-                : const SizedBox()
-          ],
+                  ),
+                ),
+              )
+                  : const SizedBox()
+            ],
+          ),
         );
       }),
     );

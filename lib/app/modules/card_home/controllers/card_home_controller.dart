@@ -9,6 +9,8 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:slaypay_cc/app/model/card_data.dart';
+import 'package:slaypay_cc/app/model/pattern.dart';
 import 'package:slaypay_cc/app/modules/image/filters.dart';
 
 import 'package:slaypay_cc/constants/app_colors.dart';
@@ -22,22 +24,20 @@ import 'package:slaypay_cc/widget/flutter_text_widget/test.dart';
 import 'package:slaypay_cc/widget/pattern_pallete.dart';
 import 'package:slaypay_cc/widget/text_properties.dart';
 
-
-
 import '../../image/images/images_view.dart';
-
 
 class CardHomeController extends GetxController {
   final cardStack = RxList<Widget>().obs;
 
   //=====================Card Color ==================================================
   final Rx<ColorDetail> cardSelectedColor =
-      ColorDetail.name(true,AppColors.accentColor).obs;
+      ColorDetail.name(true, AppColors.accentColor).obs;
 
   //=====================Card Pattern ==================================================
   final Rx<PatternDetail> cardSelectedPattern = PatternDetail(null, true).obs;
   final patternOpacity = 1.0.obs;
   final patternSize = 0.5.obs;
+  PatternData? patternData;
 
   //======================Image Editable ==========================================
 
@@ -50,6 +50,19 @@ class CardHomeController extends GetxController {
 //=====================================Text Fields ======================================
 
   final textLists = RxList<List<TextProperties>>().obs;
+
+  //===============================Card Data ============================================
+
+  CardData cardData =
+      CardData(patternData: null, cardBg: AppColors.accentColor, image: null);
+
+  //=======================Undo Data ================================================
+
+  final undoList = RxList<CardData>().obs;
+
+  //===========================Redo Data =============================================
+
+  final redoList = RxList<CardData>().obs;
 
   @override
   void onInit() {
@@ -79,7 +92,7 @@ class CardHomeController extends GetxController {
   ];
 
   addTextWidget() async {
- //cardStack.value.add( ResizebleWidget(child: TextField(autofocus: true,),));
+    //cardStack.value.add( ResizebleWidget(child: TextField(autofocus: true,),));
 
     Get.to(HomePage());
   }
@@ -157,6 +170,9 @@ class CardHomeController extends GetxController {
               selectedColor: cardSelectedColor.value,
               selectedSolidColor: (ColorDetail colorDetail) {
                 cardSelectedColor.value = colorDetail;
+
+                cardData=cardData.copyWith(cardBg: colorDetail.color);
+                undoList.value.add(cardData);
               }),
           ClipOval(
             child: Material(
@@ -366,5 +382,21 @@ class CardHomeController extends GetxController {
         ],
       ),
     );
+  }
+
+  void undo() {
+    if (undoList.value.isNotEmpty) {
+      final cardValue = undoList.value.last;
+
+      cardSelectedColor.value = ColorDetail.name(true, cardValue.cardBg!);
+
+      undoList.value.removeLast();
+    }
+  }
+
+  void redo() {
+    if (undoList.value.isNotEmpty) {
+      redoList.value.add(undoList.value.last);
+    }
   }
 }
