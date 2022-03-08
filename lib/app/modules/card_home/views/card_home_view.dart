@@ -34,22 +34,32 @@ class CardHomeView extends GetView<CardHomeController> {
             Obx(() {
               return Row(
                 children: [
-                  GestureDetector(onTap: () {
-                    controller.undo();
-                  }, child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(Icons.undo, color: controller.undoList.value
-                        .isNotEmpty ? Colors.black : Colors.black.withOpacity(
-                        0.5),),
-                  )),
-                  GestureDetector(onTap: () {
-                    controller.redo();
-                  }, child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(Icons.redo, color: controller.redoList.value
-                        .isNotEmpty ? Colors.black : Colors.black.withOpacity(
-                        0.5),),
-                  ))
+                  GestureDetector(
+                      onTap: () {
+                        controller.undo();
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(
+                          Icons.undo,
+                          color: controller.undoList.value.isNotEmpty
+                              ? Colors.black
+                              : Colors.black.withOpacity(0.5),
+                        ),
+                      )),
+                  GestureDetector(
+                      onTap: () {
+                        controller.redo();
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(
+                          Icons.redo,
+                          color: controller.redoList.value.isNotEmpty
+                              ? Colors.black
+                              : Colors.black.withOpacity(0.5),
+                        ),
+                      ))
                 ],
               );
             })
@@ -120,51 +130,51 @@ class CardHomeView extends GetView<CardHomeController> {
                   ),
                   controller.isImageEditable.value
                       ? SizedBox(
-                    width: Get.width,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const SizedBox(
-                          height: 60,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                controller.cardStack.value.removeAt(0);
-                                controller.isImageEditable.value = false;
-                              },
-                              child: const CircleAvatar(
-                                  backgroundColor: Colors.red,
-                                  child: Icon(
-                                    Icons.close,
-                                    color: Colors.white,
-                                    size: 40,
-                                  )),
-                            ),
-                            const SizedBox(
-                              width: 40,
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                controller.isImageEditable.value = false;
-                                controller.openFilterDialog();
-                              },
-                              child: const CircleAvatar(
-                                  backgroundColor: Colors.green,
-                                  child: Icon(
-                                    Icons.check_rounded,
-                                    color: Colors.white,
-                                    size: 40,
-                                  )),
-                            )
-                          ],
+                          width: Get.width,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const SizedBox(
+                                height: 60,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      controller.cardStack.value.removeAt(0);
+                                      controller.isImageEditable.value = false;
+                                    },
+                                    child: const CircleAvatar(
+                                        backgroundColor: Colors.red,
+                                        child: Icon(
+                                          Icons.close,
+                                          color: Colors.white,
+                                          size: 40,
+                                        )),
+                                  ),
+                                  const SizedBox(
+                                    width: 40,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      controller.isImageEditable.value = false;
+                                      controller.openFilterDialog();
+                                    },
+                                    child: const CircleAvatar(
+                                        backgroundColor: Colors.green,
+                                        child: Icon(
+                                          Icons.check_rounded,
+                                          color: Colors.white,
+                                          size: 40,
+                                        )),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
                         )
-                      ],
-                    ),
-                  )
                       : const SizedBox()
                 ],
               ),
@@ -186,68 +196,68 @@ class CardHomeView extends GetView<CardHomeController> {
               ),
               !controller.isImageEditable.value
                   ? Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: showAnimatedBottomSheet(
-                  childWidget: IntrinsicWidth(
-                    child: AnimatedContainer(
-                      duration: const Duration(seconds: 1),
-                      color: Colors.white,
-                      child: Padding(
-                        padding:
-                        const EdgeInsets.symmetric(vertical: 15.0),
-                        child: Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.spaceEvenly,
-                          children: [
-                            MainMenuOptions(
-                              onTap: () {
-                                controller.openColorPallete();
-                              },
-                              iconData: Icons.color_lens_rounded,
-                              title: 'Bg Color',
-                            ),
-                            MainMenuOptions(
-                              onTap: () {
-                                controller.openPatternPallete(
-                                    opacityValue:
-                                    controller.patternOpacity.value,
-                                    sizeValue:
-                                    controller.patternSize.value,
-                                    onOpacityChange: (double value) {
-                                      controller.patternOpacity.value =
-                                          value;
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: showAnimatedBottomSheet(
+                        childWidget: IntrinsicWidth(
+                          child: AnimatedContainer(
+                            duration: const Duration(seconds: 1),
+                            color: Colors.white,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 15.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  MainMenuOptions(
+                                    onTap: () {
+                                      controller.openColorPallete();
                                     },
-                                    onSizeChange: (double value) {
-                                      controller.patternSize.value =
-                                          value;
-                                    });
-                              },
-                              iconData: Icons.pattern,
-                              title: 'Patterns',
+                                    iconData: Icons.color_lens_rounded,
+                                    title: 'Bg Color',
+                                  ),
+                                  MainMenuOptions(
+                                    onTap: () {
+                                      controller.openPatternPallete(
+                                          opacityValue:
+                                              controller.patternOpacity.value,
+                                          sizeValue:
+                                              controller.patternSize.value,
+                                          onOpacityChange: (double value) {
+                                            controller.patternOpacity.value =
+                                                value;
+                                          },
+                                          onSizeChange: (double value) {
+                                            controller.patternSize.value =
+                                                value;
+                                          });
+                                    },
+                                    iconData: Icons.pattern,
+                                    title: 'Patterns',
+                                  ),
+                                  MainMenuOptions(
+                                    onTap: () {
+                                      controller.openImagePallete();
+                                    },
+                                    iconData: Icons.image,
+                                    title: 'Image',
+                                  ),
+                                  MainMenuOptions(
+                                    onTap: () {
+                                      controller.addTextWidget();
+                                    },
+                                    iconData: Icons.font_download_outlined,
+                                    title: 'Add Text',
+                                  ),
+                                ],
+                              ),
                             ),
-                            MainMenuOptions(
-                              onTap: () {
-                                controller.openImagePallete();
-                              },
-                              iconData: Icons.image,
-                              title: 'Image',
-                            ),
-                            MainMenuOptions(
-                              onTap: () {
-                                controller.addTextWidget();
-                              },
-                              iconData: Icons.font_download_outlined,
-                              title: 'Add Text',
-                            ),
-                          ],
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                ),
-              )
+                    )
                   : const SizedBox()
             ],
           ),
