@@ -23,6 +23,16 @@ class _ColorPalleteState extends State<ColorPallete> {
   @override
   void initState() {
     super.initState();
+
+  }
+  setDefaultColor(){
+    for (int i = 0; i < colorsList.length; i++) {
+     if(widget.selectedColor==colorsList[i]){
+
+     }
+    }
+
+    setState(() {});
   }
 
   @override

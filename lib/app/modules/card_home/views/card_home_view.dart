@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -29,7 +30,7 @@ class CardHomeView extends GetView<CardHomeController> {
               Assets.imagesLogo,
               color: AppColors.black,
               height: 33,
-              width: 40,
+              width: 35,
             ),
             Obx(() {
               return Row(
@@ -37,15 +38,17 @@ class CardHomeView extends GetView<CardHomeController> {
                   GestureDetector(onTap: () {
                     controller.undo();
                   }, child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(Icons.undo, color: controller.undoList.value
-                        .isNotEmpty ? Colors.black : Colors.black.withOpacity(
-                        0.5),),
+                    padding: const EdgeInsets.all(15.0),
+                    child: Container(
+                      child: Icon(Icons.undo, color: controller.undoList.value
+                          .isNotEmpty ? Colors.black : Colors.black.withOpacity(
+                          0.5),),
+                    ),
                   )),
                   GestureDetector(onTap: () {
                     controller.redo();
                   }, child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(15.0),
                     child: Icon(Icons.redo, color: controller.redoList.value
                         .isNotEmpty ? Colors.black : Colors.black.withOpacity(
                         0.5),),

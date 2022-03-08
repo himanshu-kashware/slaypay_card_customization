@@ -170,9 +170,14 @@ class CardHomeController extends GetxController {
               selectedColor: cardSelectedColor.value,
               selectedSolidColor: (ColorDetail colorDetail) {
                 cardSelectedColor.value = colorDetail;
+                if (undoList.value.isEmpty) {
+                  cardData = cardData.copyWith(cardBg: AppColors.accentColor);
+                  undoList.value.add(cardData);
+                }
+                cardData = cardData.copyWith(cardBg: colorDetail.color);
 
-                cardData=cardData.copyWith(cardBg: colorDetail.color);
                 undoList.value.add(cardData);
+                redoList.value.clear();
               }),
           ClipOval(
             child: Material(
@@ -387,16 +392,19 @@ class CardHomeController extends GetxController {
   void undo() {
     if (undoList.value.isNotEmpty) {
       final cardValue = undoList.value.last;
-
-      cardSelectedColor.value = ColorDetail.name(true, cardValue.cardBg!);
-
+      cardSelectedColor(ColorDetail.name(true, cardValue.cardBg!));
+      redoList.value.add(undoList.value.last);
       undoList.value.removeLast();
+    } else {
+      cardSelectedColor(ColorDetail.name(true, AppColors.accentColor));
     }
   }
 
   void redo() {
-    if (undoList.value.isNotEmpty) {
-      redoList.value.add(undoList.value.last);
-    }
+    if (redoList.value.isNotEmpty) {
+      undoList.value.add(redoList.value.last);
+      cardSelectedColor(ColorDetail.name(true, redoList.value.last.cardBg!));
+      redoList.value.removeLast();
+    } else {}
   }
 }

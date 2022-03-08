@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../constants/app_colors.dart';
+
 class ColorDetail {
   bool _isSelected;
   late final Color _color;
@@ -27,7 +29,7 @@ List<ColorDetail> getColorsList() {
   for (int i = 0; i < 50; i++) {
     ColorDetail _color;
     if (i == 0) {
-      _color = ColorDetail.name(true, Colors.green);
+      _color = ColorDetail.name(true, AppColors.accentColor);
     } else {
       _color = ColorDetail.name(
           false, Colors.primaries[Random().nextInt(Colors.primaries.length)]);
