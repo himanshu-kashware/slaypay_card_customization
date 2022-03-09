@@ -1,15 +1,13 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:slaypay_cc/app/modules/image/filters.dart';
+import 'package:slaypay_cc/app/model/pattern.dart';
 import 'package:slaypay_cc/constants/app_colors.dart';
 import 'package:slaypay_cc/generated/assets.dart';
 import 'package:slaypay_cc/widget/show_animated_bottom_sheet.dart';
 import 'package:slaypay_cc/widget/customDialog.dart';
 import 'package:slaypay_cc/widget/main_menu_options.dart';
-
-import '../../../../widget/text_sizer.dart';
 import '../controllers/card_home_controller.dart';
 
 class CardHomeView extends GetView<CardHomeController> {
@@ -18,75 +16,85 @@ class CardHomeView extends GetView<CardHomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        toolbarHeight: 66,
-        backgroundColor: AppColors.white,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SvgPicture.asset(
-              Assets.imagesLogo,
-              color: AppColors.black,
-              height: 33,
-              width: 35,
-            ),
-            Obx(() {
-              return Row(
+    return SafeArea(
+      bottom: false,
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          toolbarHeight: 66,
+          backgroundColor: AppColors.white,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SvgPicture.asset(
+                Assets.imagesLogo,
+                color: AppColors.black,
+                height: 33,
+                width: 35,
+              ),
+              Obx(() {
+                return Row(
+                  children: [
+                    GestureDetector(
+                        onTap: () {
+                          controller.undo();
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Icon(
+                            Icons.undo,
+                            color: controller.undoList.value.isEmpty ||
+                                    controller.undoList.value.length == 1
+                                ? Colors.black.withOpacity(0.5)
+                                : Colors.black,
+                          ),
+                        )),
+                    GestureDetector(
+                        onTap: () {
+                          controller.redo();
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(15.0),
+                          child: Icon(
+                            Icons.redo,
+                            color: controller.redoList.value.isNotEmpty
+                                ? Colors.black
+                                : Colors.black.withOpacity(0.5),
+                          ),
+                        ))
+                  ],
+                );
+              })
+            ],
+          ),
+          actions: [
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
+              child: Row(
                 children: [
-                  GestureDetector(onTap: () {
-                    controller.undo();
-                  }, child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Container(
-                      child: Icon(Icons.undo, color: controller.undoList.value
-                          .isNotEmpty ? Colors.black : Colors.black.withOpacity(
-                          0.5),),
+                  ClipRRect(
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    child: TextButton(
+                      onPressed: () {},
+                      child: const Text(
+                        "Next",
+                        style: TextStyle(
+                          color: AppColors.white,
+                        ),
+                      ),
+                      style: TextButton.styleFrom(
+                          backgroundColor: AppColors.accentColor,
+                          minimumSize: const Size(120, 70)),
                     ),
-                  )),
-                  GestureDetector(onTap: () {
-                    controller.redo();
-                  }, child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Icon(Icons.redo, color: controller.redoList.value
-                        .isNotEmpty ? Colors.black : Colors.black.withOpacity(
-                        0.5),),
-                  ))
+                  ),
                 ],
-              );
-            })
+              ),
+            )
           ],
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
-            child: Row(
-              children: [
-                ClipRRect(
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  child: TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      "Next",
-                      style: TextStyle(
-                        color: AppColors.white,
-                      ),
-                    ),
-                    style: TextButton.styleFrom(
-                        backgroundColor: AppColors.accentColor,
-                        minimumSize: const Size(120, 70)),
-                  ),
-                ),
-              ],
-            ),
-          )
-        ],
-      ),
-      body: Obx(() {
-        return SafeArea(
-          bottom: false,
-          child: Stack(
+        body: Obx(() {
+          return Stack(
             children: [
               Positioned.fill(
                 child: Image.asset(
@@ -123,51 +131,51 @@ class CardHomeView extends GetView<CardHomeController> {
                   ),
                   controller.isImageEditable.value
                       ? SizedBox(
-                    width: Get.width,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const SizedBox(
-                          height: 60,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                controller.cardStack.value.removeAt(0);
-                                controller.isImageEditable.value = false;
-                              },
-                              child: const CircleAvatar(
-                                  backgroundColor: Colors.red,
-                                  child: Icon(
-                                    Icons.close,
-                                    color: Colors.white,
-                                    size: 40,
-                                  )),
-                            ),
-                            const SizedBox(
-                              width: 40,
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                controller.isImageEditable.value = false;
-                                controller.openFilterDialog();
-                              },
-                              child: const CircleAvatar(
-                                  backgroundColor: Colors.green,
-                                  child: Icon(
-                                    Icons.check_rounded,
-                                    color: Colors.white,
-                                    size: 40,
-                                  )),
-                            )
-                          ],
+                          width: Get.width,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const SizedBox(
+                                height: 60,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      controller.cardStack.value.removeAt(0);
+                                      controller.isImageEditable.value = false;
+                                    },
+                                    child: const CircleAvatar(
+                                        backgroundColor: Colors.red,
+                                        child: Icon(
+                                          Icons.close,
+                                          color: Colors.white,
+                                          size: 40,
+                                        )),
+                                  ),
+                                  const SizedBox(
+                                    width: 40,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () {
+                                      controller.isImageEditable.value = false;
+                                      controller.openFilterDialog();
+                                    },
+                                    child: const CircleAvatar(
+                                        backgroundColor: Colors.green,
+                                        child: Icon(
+                                          Icons.check_rounded,
+                                          color: Colors.white,
+                                          size: 40,
+                                        )),
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
                         )
-                      ],
-                    ),
-                  )
                       : const SizedBox()
                 ],
               ),
@@ -189,73 +197,99 @@ class CardHomeView extends GetView<CardHomeController> {
               ),
               !controller.isImageEditable.value
                   ? Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: showAnimatedBottomSheet(
-                  childWidget: IntrinsicWidth(
-                    child: AnimatedContainer(
-                      duration: const Duration(seconds: 1),
-                      color: Colors.white,
-                      child: Padding(
-                        padding:
-                        const EdgeInsets.symmetric(vertical: 15.0),
-                        child: Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.spaceEvenly,
-                          children: [
-                            MainMenuOptions(
-                              onTap: () {
-                                controller.openColorPallete();
-                              },
-                              iconData: Icons.color_lens_rounded,
-                              title: 'Bg Color',
-                            ),
-                            MainMenuOptions(
-                              onTap: () {
-                                controller.openPatternPallete(
-                                    opacityValue:
-                                    controller.patternOpacity.value,
-                                    sizeValue:
-                                    controller.patternSize.value,
-                                    onOpacityChange: (double value) {
-                                      controller.patternOpacity.value =
-                                          value;
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: showAnimatedBottomSheet(
+                        childWidget: IntrinsicWidth(
+                          child: AnimatedContainer(
+                            duration: const Duration(seconds: 1),
+                            color: Colors.white,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 15.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  MainMenuOptions(
+                                    onTap: () {
+                                      controller.openColorPallete();
                                     },
-                                    onSizeChange: (double value) {
-                                      controller.patternSize.value =
-                                          value;
-                                    });
-                              },
-                              iconData: Icons.pattern,
-                              title: 'Patterns',
+                                    iconData: Icons.color_lens_rounded,
+                                    title: 'Bg Color',
+                                  ),
+                                  MainMenuOptions(
+                                    onTap: () {
+                                      controller.openPatternPallete(
+                                          onPatternSelected: (pattern) {
+                                            controller.cardData =
+                                                controller.cardData.copyWith(
+                                                    patternData: controller
+                                                        .patternData
+                                                        .copyWith(
+                                                            pattern: pattern));
+
+                                            controller.addToCardStack();
+                                          },
+                                          opacityValue:
+                                              controller.patternOpacity.value,
+                                          sizeValue:
+                                              controller.patternSize.value,
+                                          onOpacityChange: (double value) {
+                                            controller.patternOpacity.value =
+                                                value;
+                                            // controller.cardData.copyWith(
+                                            //     patternData: controller
+                                            //         .patternData
+                                            //         .copyWith(
+                                            //             patternOpacity: value));
+                                            //
+                                            // controller.addToCardStack(
+                                            //     controller.cardData);
+                                          },
+                                          onSizeChange: (double value) {
+                                            controller.patternSize.value =
+                                                value;
+                                            // controller.cardData.copyWith(
+                                            //     patternData: controller
+                                            //         .patternData
+                                            //         .copyWith(
+                                            //         patternSize: value));
+                                            //
+                                            // controller.addToCardStack(
+                                            //     controller.cardData);
+                                          });
+                                    },
+                                    iconData: Icons.pattern,
+                                    title: 'Patterns',
+                                  ),
+                                  MainMenuOptions(
+                                    onTap: () {
+                                      controller.openImagePallete();
+                                    },
+                                    iconData: Icons.image,
+                                    title: 'Image',
+                                  ),
+                                  MainMenuOptions(
+                                    onTap: () {
+                                      controller.addTextWidget();
+                                    },
+                                    iconData: Icons.font_download_outlined,
+                                    title: 'Add Text',
+                                  ),
+                                ],
+                              ),
                             ),
-                            MainMenuOptions(
-                              onTap: () {
-                                controller.openImagePallete();
-                              },
-                              iconData: Icons.image,
-                              title: 'Image',
-                            ),
-                            MainMenuOptions(
-                              onTap: () {
-                                controller.addTextWidget();
-                              },
-                              iconData: Icons.font_download_outlined,
-                              title: 'Add Text',
-                            ),
-                          ],
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                ),
-              )
+                    )
                   : const SizedBox()
             ],
-          ),
-        );
-      }),
+          );
+        }),
+      ),
     );
   }
 }

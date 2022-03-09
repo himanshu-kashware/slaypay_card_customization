@@ -37,7 +37,7 @@ class CardHomeController extends GetxController {
   final Rx<PatternDetail> cardSelectedPattern = PatternDetail(null, true).obs;
   final patternOpacity = 1.0.obs;
   final patternSize = 0.5.obs;
-  PatternData? patternData;
+  PatternData patternData=PatternData(patternOpacity: 1, patternSize: 0.5, pattern: '');
 
   //======================Image Editable ==========================================
 
@@ -202,6 +202,7 @@ class CardHomeController extends GetxController {
       {required double opacityValue,
       required double sizeValue,
       required Function(double) onSizeChange,
+        required Function(String) onPatternSelected,
       required Function(double) onOpacityChange}) {
     final opacity = 0.0.obs;
     final size = 0.0.obs;
@@ -235,6 +236,9 @@ class CardHomeController extends GetxController {
                   onChanged: (value) {
                     onOpacityChange(value);
                     opacity.value = value;
+
+
+
                     addPattern();
                   },
                 ),
@@ -245,6 +249,8 @@ class CardHomeController extends GetxController {
                   onChanged: (value) {
                     onSizeChange(value);
                     size.value = value;
+
+
                     addPattern();
                   },
                 ),
@@ -255,6 +261,7 @@ class CardHomeController extends GetxController {
               preFilledPattern: cardSelectedPattern.value,
               selectedPattern: (PatternDetail patternDetail) {
                 cardSelectedPattern.value = patternDetail;
+                onPatternSelected(patternDetail.pattern_data!);
                 addPattern();
               }),
         ],
@@ -262,6 +269,11 @@ class CardHomeController extends GetxController {
     );
   }
 
+
+  addToCardStack(){
+    undoList.value.add(cardData);
+    redoList.value.clear();
+  }
   //========================================Open Image Pallete =====================================
 
   void openImagePallete() {
@@ -391,10 +403,16 @@ class CardHomeController extends GetxController {
 
   void undo() {
     if (undoList.value.isNotEmpty) {
-      final cardValue = undoList.value.last;
-      cardSelectedColor(ColorDetail.name(true, cardValue.cardBg!));
       redoList.value.add(undoList.value.last);
       undoList.value.removeLast();
+      try{
+        cardSelectedColor(ColorDetail.name(true, undoList.value.last.cardBg!,));
+      }catch(e){
+        print(e);
+      }
+
+      cardSelectedPattern(PatternDetail(undoList.value.last.patternData!.pattern!,true));
+
     } else {
       cardSelectedColor(ColorDetail.name(true, AppColors.accentColor));
     }
@@ -404,6 +422,8 @@ class CardHomeController extends GetxController {
     if (redoList.value.isNotEmpty) {
       undoList.value.add(redoList.value.last);
       cardSelectedColor(ColorDetail.name(true, redoList.value.last.cardBg!));
+      cardSelectedPattern(PatternDetail(redoList.value.last.patternData!.pattern!,true));
+
       redoList.value.removeLast();
     } else {}
   }
