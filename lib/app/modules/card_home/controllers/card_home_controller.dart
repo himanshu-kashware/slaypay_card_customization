@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -37,7 +38,8 @@ class CardHomeController extends GetxController {
   final Rx<PatternDetail> cardSelectedPattern = PatternDetail(null, true).obs;
   final patternOpacity = 1.0.obs;
   final patternSize = 0.5.obs;
-  PatternData patternData=PatternData(patternOpacity: 1, patternSize: 0.5, pattern: '');
+  PatternData patternData =
+      PatternData(patternOpacity: 1, patternSize: 0.5, pattern: '');
 
   //======================Image Editable ==========================================
 
@@ -53,8 +55,7 @@ class CardHomeController extends GetxController {
 
   //===============================Card Data ============================================
 
-  CardData cardData =
-      CardData(patternData: null, cardBg: AppColors.accentColor, image: null);
+  late CardData cardData;
 
   //=======================Undo Data ================================================
 
@@ -67,6 +68,8 @@ class CardHomeController extends GetxController {
   @override
   void onInit() {
     addDefaultWidget();
+    cardData = CardData(
+        patternData: patternData, cardBg: AppColors.accentColor, image: null);
     super.onInit();
   }
 
@@ -202,7 +205,7 @@ class CardHomeController extends GetxController {
       {required double opacityValue,
       required double sizeValue,
       required Function(double) onSizeChange,
-        required Function(String) onPatternSelected,
+      required Function(String) onPatternSelected,
       required Function(double) onOpacityChange}) {
     final opacity = 0.0.obs;
     final size = 0.0.obs;
@@ -237,8 +240,6 @@ class CardHomeController extends GetxController {
                     onOpacityChange(value);
                     opacity.value = value;
 
-
-
                     addPattern();
                   },
                 ),
@@ -249,7 +250,6 @@ class CardHomeController extends GetxController {
                   onChanged: (value) {
                     onSizeChange(value);
                     size.value = value;
-
 
                     addPattern();
                   },
@@ -263,17 +263,23 @@ class CardHomeController extends GetxController {
                 cardSelectedPattern.value = patternDetail;
                 onPatternSelected(patternDetail.pattern_data!);
                 addPattern();
+
+                cardData = cardData.copyWith(
+                    patternData: patternData.copyWith(
+                        pattern: patternDetail.pattern_data));
+                undoList.value.add(cardData);
+                redoList.value.clear();
               }),
         ],
       ),
     );
   }
 
-
-  addToCardStack(){
+  addToCardStack() {
     undoList.value.add(cardData);
     redoList.value.clear();
   }
+
   //========================================Open Image Pallete =====================================
 
   void openImagePallete() {
@@ -405,14 +411,29 @@ class CardHomeController extends GetxController {
     if (undoList.value.isNotEmpty) {
       redoList.value.add(undoList.value.last);
       undoList.value.removeLast();
-      try{
-        cardSelectedColor(ColorDetail.name(true, undoList.value.last.cardBg!,));
-      }catch(e){
-        print(e);
+      try {
+        cardSelectedColor(ColorDetail.name(
+          true,
+          undoList.value.last.cardBg!,
+        ));
+      } catch (e) {
+        if (kDebugMode) {
+          print(e);
+        }
       }
+      try {
+          cardSelectedPattern.value.pattern_data =
+              undoList.value.last.patternData!.pattern!;
+          cardSelectedPattern.value.isSelected = true;
+          if(cardSelectedPattern.value.pattern_data!.isEmpty){
+            cardStack.value.removeAt(0);
+          }
 
-      cardSelectedPattern(PatternDetail(undoList.value.last.patternData!.pattern!,true));
-
+      } catch (e) {
+        if (kDebugMode) {
+          print(e);
+        }
+      }
     } else {
       cardSelectedColor(ColorDetail.name(true, AppColors.accentColor));
     }
@@ -422,8 +443,6 @@ class CardHomeController extends GetxController {
     if (redoList.value.isNotEmpty) {
       undoList.value.add(redoList.value.last);
       cardSelectedColor(ColorDetail.name(true, redoList.value.last.cardBg!));
-      cardSelectedPattern(PatternDetail(redoList.value.last.patternData!.pattern!,true));
-
       redoList.value.removeLast();
     } else {}
   }

@@ -223,14 +223,14 @@ class CardHomeView extends GetView<CardHomeController> {
                                     onTap: () {
                                       controller.openPatternPallete(
                                           onPatternSelected: (pattern) {
-                                            controller.cardData =
-                                                controller.cardData.copyWith(
-                                                    patternData: controller
-                                                        .patternData
-                                                        .copyWith(
-                                                            pattern: pattern));
-
-                                            controller.addToCardStack();
+                                            // controller.cardData =
+                                            //     controller.cardData.copyWith(
+                                            //         patternData: controller
+                                            //             .patternData
+                                            //             .copyWith(
+                                            //                 pattern: pattern));
+                                            //
+                                            // controller.addToCardStack();
                                           },
                                           opacityValue:
                                               controller.patternOpacity.value,

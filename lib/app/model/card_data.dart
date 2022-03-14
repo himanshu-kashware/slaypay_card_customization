@@ -8,13 +8,15 @@ class CardData {
     XFile? image;
     double? imagePosX;
    double? imagePosY;
+   bool? isPatternEnabled;
 
   CardData(
       { this.patternData,
           this.cardBg,
          this.image,
          this.imagePosX,
-          this.imagePosY});
+          this.imagePosY,
+      this.isPatternEnabled});
 
   CardData copyWith({
     PatternData? patternData,
@@ -22,6 +24,7 @@ class CardData {
     XFile? image,
     double? imagePosX,
     double? imagePosY,
+    bool? isPatternEnabled
   }) {
     return CardData(
       patternData: patternData ?? this.patternData,
@@ -29,8 +32,15 @@ class CardData {
       image: image ?? this.image,
       imagePosX: imagePosX ?? this.imagePosX,
       imagePosY: imagePosY ?? this.imagePosY,
+      isPatternEnabled: isPatternEnabled??this.isPatternEnabled
     );
   }
+    bool? get isPatternEnable => isPatternEnabled;
+
+    set isPatternEnable(bool? value) {
+      isPatternEnabled = value;
+    }
+
 
   double? get imagePosYGet => imagePosY;
 
