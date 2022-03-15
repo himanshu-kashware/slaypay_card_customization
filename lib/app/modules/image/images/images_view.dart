@@ -7,18 +7,27 @@ import 'package:photo_view/photo_view.dart';
 import 'package:slaypay_cc/app/modules/card_home/controllers/card_home_controller.dart';
 
 class ImagesComponent extends GetView<CardHomeController> {
-  const ImagesComponent({
-    Key? key,
-    this.image,
-  }) : super(key: key);
+  PhotoViewControllerBase photoCaseController;
+
+
+  ImagesComponent({Key? key, this.image, required this.photoCaseController})
+      : super(key: key);
 
   final String? image;
 
   @override
   CardHomeController get controller => super.controller;
 
+  void mt() {
+    if (kDebugMode) {
+      print(
+        " ${photoCaseController.scale!}${photoCaseController.position}${photoCaseController.rotation}${controller.blendColor.value}");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    mt();
     return Obx(() {
       return ColorFiltered(
         colorFilter: ColorFilter.mode(
@@ -28,6 +37,7 @@ class ImagesComponent extends GetView<CardHomeController> {
         child: PhotoView(
           enableRotation: controller.isImageEditable.value,
           disableGestures: !controller.isImageEditable.value,
+          controller: photoCaseController,
           imageProvider: FileImage(
             File("$image"),
           ),

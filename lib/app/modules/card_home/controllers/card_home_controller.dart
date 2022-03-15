@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:image_picker/image_picker.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:slaypay_cc/app/model/card_data.dart';
 import 'package:slaypay_cc/app/model/pattern.dart';
 import 'package:slaypay_cc/app/modules/image/filters.dart';
@@ -145,11 +146,33 @@ class CardHomeController extends GetxController {
       cardStack.value.insert(0, _pattern);
     }
   }
+  //==================================Undo Pattern ========================================
+
+  void addUndoRedoPattern(String asset){
+
+    Widget _pattern = Transform.scale(
+      scale: patternSize.value,
+      child: SvgPicture.asset(
+        asset,
+        fit: BoxFit.fill,
+        color: Colors.grey.withOpacity(patternOpacity.value),
+      ),
+    );
+
+    if (cardStack.value.length > 2) {
+      cardStack.value.removeAt(0);
+      cardStack.value.insert(0, _pattern);
+    } else {
+      cardStack.value.insert(0, _pattern);
+    }
+
+  }
+
 
   //=================================Add Image ========================
 
   void addImage({required String image}) {
-    Widget _pattern = ImagesComponent(image: image);
+    Widget _pattern = ImagesComponent(image: image,photoCaseController: PhotoViewController(initialScale: 1),);
     if (cardStack.value.length > 2) {
       cardStack.value.removeAt(0);
       cardStack.value.insert(0, _pattern);
@@ -425,13 +448,18 @@ class CardHomeController extends GetxController {
           cardSelectedPattern.value.pattern_data =
               undoList.value.last.patternData!.pattern!;
           cardSelectedPattern.value.isSelected = true;
+
+
           if(cardSelectedPattern.value.pattern_data!.isEmpty){
             cardStack.value.removeAt(0);
+          }else{
+            addUndoRedoPattern(cardSelectedPattern.value.pattern_data! );
           }
 
       } catch (e) {
         if (kDebugMode) {
           print(e);
+          cardStack.value.removeAt(0);
         }
       }
     } else {
@@ -443,7 +471,30 @@ class CardHomeController extends GetxController {
     if (redoList.value.isNotEmpty) {
       undoList.value.add(redoList.value.last);
       cardSelectedColor(ColorDetail.name(true, redoList.value.last.cardBg!));
+
+
+      try {
+        cardSelectedPattern.value.pattern_data =
+        redoList.value.last.patternData!.pattern!;
+        cardSelectedPattern.value.isSelected = true;
+
+
+        if(cardSelectedPattern.value.pattern_data!.isEmpty){
+          cardStack.value.removeAt(0);
+        }else{
+          addUndoRedoPattern(cardSelectedPattern.value.pattern_data! );
+        }
+
+      } catch (e) {
+        if (kDebugMode) {
+          print(e);
+          cardStack.value.removeAt(0);
+        }
+      }
       redoList.value.removeLast();
+
+
+
     } else {}
   }
 }
