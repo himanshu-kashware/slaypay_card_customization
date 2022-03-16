@@ -9,7 +9,6 @@ import 'package:slaypay_cc/app/modules/card_home/controllers/card_home_controlle
 class ImagesComponent extends GetView<CardHomeController> {
   PhotoViewControllerBase photoCaseController;
 
-
   ImagesComponent({Key? key, this.image, required this.photoCaseController})
       : super(key: key);
 
@@ -18,16 +17,8 @@ class ImagesComponent extends GetView<CardHomeController> {
   @override
   CardHomeController get controller => super.controller;
 
-  void mt() {
-    if (kDebugMode) {
-      print(
-        " ${photoCaseController.scale!}${photoCaseController.position}${photoCaseController.rotation}${controller.blendColor.value}");
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    mt();
     return Obx(() {
       return ColorFiltered(
         colorFilter: ColorFilter.mode(

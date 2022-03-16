@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
@@ -7,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:photo_view/photo_view.dart';
@@ -146,10 +143,10 @@ class CardHomeController extends GetxController {
       cardStack.value.insert(0, _pattern);
     }
   }
+
   //==================================Undo Pattern ========================================
 
-  void addUndoRedoPattern(String asset){
-
+  void addUndoRedoPattern(String asset) {
     Widget _pattern = Transform.scale(
       scale: patternSize.value,
       child: SvgPicture.asset(
@@ -165,14 +162,15 @@ class CardHomeController extends GetxController {
     } else {
       cardStack.value.insert(0, _pattern);
     }
-
   }
-
 
   //=================================Add Image ========================
 
   void addImage({required String image}) {
-    Widget _pattern = ImagesComponent(image: image,photoCaseController: PhotoViewController(initialScale: 1),);
+    Widget _pattern = ImagesComponent(
+      image: image,
+      photoCaseController: PhotoViewController(initialScale: 1),
+    );
     if (cardStack.value.length > 2) {
       cardStack.value.removeAt(0);
       cardStack.value.insert(0, _pattern);
@@ -200,7 +198,12 @@ class CardHomeController extends GetxController {
                   cardData = cardData.copyWith(cardBg: AppColors.accentColor);
                   undoList.value.add(cardData);
                 }
-                cardData = cardData.copyWith(cardBg: colorDetail.color);
+                cardData = cardData.copyWith(
+                    cardBg: colorDetail.color,
+                    patternData: PatternData(
+                        patternOpacity: patternOpacity.value,
+                        patternSize: patternSize.value,
+                        pattern: null));
 
                 undoList.value.add(cardData);
                 redoList.value.clear();
@@ -445,23 +448,20 @@ class CardHomeController extends GetxController {
         }
       }
       try {
+        if (undoList.value.last.patternData != null) {
           cardSelectedPattern.value.pattern_data =
-              undoList.value.last.patternData!.pattern!;
+              undoList.value.last.patternData!.pattern;
           cardSelectedPattern.value.isSelected = true;
-
-
-          if(cardSelectedPattern.value.pattern_data!.isEmpty){
-            cardStack.value.removeAt(0);
-          }else{
-            addUndoRedoPattern(cardSelectedPattern.value.pattern_data! );
-          }
-
-      } catch (e) {
-        if (kDebugMode) {
-          print(e);
-          cardStack.value.removeAt(0);
         }
-      }
+        if (cardSelectedPattern.value.pattern_data != null) {
+          addUndoRedoPattern(cardSelectedPattern.value.pattern_data!);
+        }
+        else{
+          if(cardStack.value.length>2){
+            cardStack.value.removeAt(0);
+          }
+        }
+      } catch (e) {}
     } else {
       cardSelectedColor(ColorDetail.name(true, AppColors.accentColor));
     }
@@ -472,29 +472,19 @@ class CardHomeController extends GetxController {
       undoList.value.add(redoList.value.last);
       cardSelectedColor(ColorDetail.name(true, redoList.value.last.cardBg!));
 
-
       try {
         cardSelectedPattern.value.pattern_data =
-        redoList.value.last.patternData!.pattern!;
+            redoList.value.last.patternData!.pattern;
         cardSelectedPattern.value.isSelected = true;
-
-
-        if(cardSelectedPattern.value.pattern_data!.isEmpty){
-          cardStack.value.removeAt(0);
-        }else{
-          addUndoRedoPattern(cardSelectedPattern.value.pattern_data! );
+        if (cardSelectedPattern.value.pattern_data != null) {
+          addUndoRedoPattern(cardSelectedPattern.value.pattern_data!);
         }
-
       } catch (e) {
         if (kDebugMode) {
           print(e);
-          cardStack.value.removeAt(0);
         }
       }
       redoList.value.removeLast();
-
-
-
     } else {}
   }
 }

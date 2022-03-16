@@ -32,39 +32,6 @@ class CardHomeView extends GetView<CardHomeController> {
                 height: 33,
                 width: 35,
               ),
-              Obx(() {
-                return Row(
-                  children: [
-                    GestureDetector(
-                        onTap: () {
-                          controller.undo();
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Icon(
-                            Icons.undo,
-                            color: controller.undoList.value.isEmpty ||
-                                    controller.undoList.value.length == 1
-                                ? Colors.black.withOpacity(0.5)
-                                : Colors.black,
-                          ),
-                        )),
-                    GestureDetector(
-                        onTap: () {
-                          controller.redo();
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: Icon(
-                            Icons.redo,
-                            color: controller.redoList.value.isNotEmpty
-                                ? Colors.black
-                                : Colors.black.withOpacity(0.5),
-                          ),
-                        ))
-                  ],
-                );
-              })
             ],
           ),
           actions: [
@@ -182,18 +149,55 @@ class CardHomeView extends GetView<CardHomeController> {
               Positioned(
                 right: 10,
                 top: 24,
-                child: FloatingActionButton(
-                  mini: true,
-                  backgroundColor: const Color(0xff6F7FAF),
-                  onPressed: () {
-                    showCustomDialog(onTap: () {
-                      controller.cardStack.value.clear();
-                      controller.addDefaultWidget();
-                      Get.back();
-                    });
-                  },
-                  child: SvgPicture.asset(Assets.imagesRemove),
-                ),
+                child: Obx(() {
+                  return SizedBox(
+                    width: Get.width/2.5,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                            onTap: () {
+                              controller.undo();
+                            },
+                            child: CircleAvatar(
+                              backgroundColor: Color(0xff6F7FAF),
+                              child: Icon(
+                                Icons.undo,
+                                color: controller.undoList.value.isEmpty ||
+                                        controller.undoList.value.length == 1
+                                    ? Colors.white.withOpacity(0.5)
+                                    : Colors.white,
+                              ),
+                            )),
+                        GestureDetector(
+                            onTap: () {
+                              controller.redo();
+                            },
+                            child: CircleAvatar(
+                              backgroundColor: Color(0xff6F7FAF),
+                              child: Icon(
+                                Icons.redo,
+                                color: controller.redoList.value.isNotEmpty
+                                    ? Colors.white
+                                    : Colors.white.withOpacity(0.5),
+                              ),
+                            )),
+                        GestureDetector(
+                            onTap: () {
+                              showCustomDialog(onTap: () {
+                                controller.cardStack.value.clear();
+                                controller.addDefaultWidget();
+                                Get.back();
+                              });
+                            },
+                            child: CircleAvatar(
+                                backgroundColor: Color(0xff6F7FAF),
+                                child: SvgPicture.asset(Assets.imagesRemove))),
+                        const SizedBox()
+                      ],
+                    ),
+                  );
+                }),
               ),
               !controller.isImageEditable.value
                   ? Positioned(
