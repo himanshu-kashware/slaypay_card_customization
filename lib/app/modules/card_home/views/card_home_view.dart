@@ -1,14 +1,13 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:slaypay_cc/app/modules/image/filters.dart';
+import 'package:slaypay_cc/app/model/pattern.dart';
 import 'package:slaypay_cc/constants/app_colors.dart';
 import 'package:slaypay_cc/generated/assets.dart';
 import 'package:slaypay_cc/widget/show_animated_bottom_sheet.dart';
 import 'package:slaypay_cc/widget/customDialog.dart';
 import 'package:slaypay_cc/widget/main_menu_options.dart';
-
-import '../../../../widget/text_sizer.dart';
 import '../controllers/card_home_controller.dart';
 
 class CardHomeView extends GetView<CardHomeController> {
@@ -17,83 +16,44 @@ class CardHomeView extends GetView<CardHomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        toolbarHeight: 66,
-        backgroundColor: AppColors.white,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SvgPicture.asset(
-              Assets.imagesLogo,
-              color: AppColors.black,
-              height: 33,
-              width: 40,
-            ),
-            Obx(() {
-              return Row(
+    return SafeArea(
+      bottom: false,
+      child: Scaffold(
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          toolbarHeight: 66,
+          backgroundColor: AppColors.white,
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SvgPicture.asset(
+                Assets.imagesLogo,
+                color: AppColors.black,
+                height: 33,
+                width: 35,
+              ),
+            ],
+          ),
+          actions: [
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
+              child: Row(
                 children: [
-                  GestureDetector(
-                      onTap: () {
-                        controller.undo();
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(
-                          Icons.undo,
-                          color: controller.undoList.value.isNotEmpty
-                              ? Colors.black
-                              : Colors.black.withOpacity(0.5),
-                        ),
-                      )),
-                  GestureDetector(
-                      onTap: () {
-                        controller.redo();
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(
-                          Icons.redo,
-                          color: controller.redoList.value.isNotEmpty
-                              ? Colors.black
-                              : Colors.black.withOpacity(0.5),
-                        ),
-                      ))
+
+                      ),
+                      style: TextButton.styleFrom(
+                          backgroundColor: AppColors.accentColor,
+                          minimumSize: const Size(120, 70)),
+                    ),
+                  ),
                 ],
-              );
-            })
+              ),
+            )
           ],
         ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
-            child: Row(
-              children: [
-                ClipRRect(
-                  borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  child: TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      "Next",
-                      style: TextStyle(
-                        color: AppColors.white,
-                      ),
-                    ),
-                    style: TextButton.styleFrom(
-                        backgroundColor: AppColors.accentColor,
-                        minimumSize: const Size(120, 70)),
-                  ),
-                ),
-              ],
-            ),
-          )
-        ],
-      ),
-      body: Obx(() {
-        return SafeArea(
-          bottom: false,
-          child: Stack(
+        body: Obx(() {
+          return Stack(
             children: [
               Positioned.fill(
                 child: Image.asset(
@@ -181,18 +141,55 @@ class CardHomeView extends GetView<CardHomeController> {
               Positioned(
                 right: 10,
                 top: 24,
-                child: FloatingActionButton(
-                  mini: true,
-                  backgroundColor: const Color(0xff6F7FAF),
-                  onPressed: () {
-                    showCustomDialog(onTap: () {
-                      controller.cardStack.value.clear();
-                      controller.addDefaultWidget();
-                      Get.back();
-                    });
-                  },
-                  child: SvgPicture.asset(Assets.imagesRemove),
-                ),
+                child: Obx(() {
+                  return SizedBox(
+                    width: Get.width/2.5,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                            onTap: () {
+                              controller.undo();
+                            },
+                            child: CircleAvatar(
+                              backgroundColor: Color(0xff6F7FAF),
+                              child: Icon(
+                                Icons.undo,
+                                color: controller.undoList.value.isEmpty ||
+                                        controller.undoList.value.length == 1
+                                    ? Colors.white.withOpacity(0.5)
+                                    : Colors.white,
+                              ),
+                            )),
+                        GestureDetector(
+                            onTap: () {
+                              controller.redo();
+                            },
+                            child: CircleAvatar(
+                              backgroundColor: Color(0xff6F7FAF),
+                              child: Icon(
+                                Icons.redo,
+                                color: controller.redoList.value.isNotEmpty
+                                    ? Colors.white
+                                    : Colors.white.withOpacity(0.5),
+                              ),
+                            )),
+                        GestureDetector(
+                            onTap: () {
+                              showCustomDialog(onTap: () {
+                                controller.cardStack.value.clear();
+                                controller.addDefaultWidget();
+                                Get.back();
+                              });
+                            },
+                            child: CircleAvatar(
+                                backgroundColor: Color(0xff6F7FAF),
+                                child: SvgPicture.asset(Assets.imagesRemove))),
+                        const SizedBox()
+                      ],
+                    ),
+                  );
+                }),
               ),
               !controller.isImageEditable.value
                   ? Positioned(
@@ -221,6 +218,19 @@ class CardHomeView extends GetView<CardHomeController> {
                                   MainMenuOptions(
                                     onTap: () {
                                       controller.openPatternPallete(
+
+
+                                          onPatternSelected: (pattern) {
+                                            // controller.cardData =
+                                            //     controller.cardData.copyWith(
+                                            //         patternData: controller
+                                            //             .patternData
+                                            //             .copyWith(
+                                            //                 pattern: pattern));
+                                            //
+                                            // controller.addToCardStack();
+                                          },
+
                                           opacityValue:
                                               controller.patternOpacity.value,
                                           sizeValue:
@@ -228,10 +238,12 @@ class CardHomeView extends GetView<CardHomeController> {
                                           onOpacityChange: (double value) {
                                             controller.patternOpacity.value =
                                                 value;
+
                                           },
                                           onSizeChange: (double value) {
                                             controller.patternSize.value =
                                                 value;
+
                                           });
                                     },
                                     iconData: Icons.pattern,
@@ -260,9 +272,9 @@ class CardHomeView extends GetView<CardHomeController> {
                     )
                   : const SizedBox()
             ],
-          ),
-        );
-      }),
+          );
+        }),
+      ),
     );
   }
 }

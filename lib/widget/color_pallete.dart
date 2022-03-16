@@ -23,6 +23,16 @@ class _ColorPalleteState extends State<ColorPallete> {
   @override
   void initState() {
     super.initState();
+
+  }
+  setDefaultColor(){
+    for (int i = 0; i < colorsList.length; i++) {
+     if(widget.selectedColor==colorsList[i]){
+
+     }
+    }
+
+    setState(() {});
   }
 
   @override
@@ -62,11 +72,11 @@ class _ColorPalleteState extends State<ColorPallete> {
                         child: AnimatedContainer(
 
                           height: colorsList[index].isSelected
-                              ? Get.width / 15
-                              : Get.width / 20,
+                              ? Get.width / 10
+                              : Get.width / 15,
                           width: colorsList[index].isSelected
-                              ? Get.width / 15
-                              : Get.width / 20,
+                              ? Get.width / 10
+                              : Get.width / 15,
                           decoration: BoxDecoration(
                               color: colorsList[index].color,
 

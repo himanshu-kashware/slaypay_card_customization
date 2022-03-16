@@ -1,7 +1,7 @@
 class PatternData {
   late double patternOpacity;
   late double patternSize;
-  late String pattern;
+  late String? pattern;
 
   PatternData(
       {required this.patternOpacity,
@@ -14,7 +14,7 @@ class PatternData {
     patternSize = value;
   }
 
-  String get patternGet => pattern;
+  String? get patternGet => pattern;
 
   set patternSet(String value) {
     pattern = value;
