@@ -1,17 +1,15 @@
+import 'dart:io';
 import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-
 import 'package:image_picker/image_picker.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:slaypay_cc/app/model/card_data.dart';
 import 'package:slaypay_cc/app/model/pattern.dart';
 import 'package:slaypay_cc/app/modules/image/filters.dart';
-
 import 'package:slaypay_cc/constants/app_colors.dart';
 import 'package:slaypay_cc/generated/assets.dart';
 import 'package:slaypay_cc/util/color_detail.dart';
@@ -19,7 +17,6 @@ import 'package:slaypay_cc/util/pattern_detail.dart';
 import 'package:slaypay_cc/widget/CustomSlider.dart';
 import 'package:slaypay_cc/widget/color_pallete.dart';
 import 'package:slaypay_cc/widget/custom_bottom_sheet_options.dart';
-import 'package:slaypay_cc/widget/flutter_text_widget/test.dart';
 import 'package:slaypay_cc/widget/pattern_pallete.dart';
 import 'package:slaypay_cc/widget/text_editor/text_editor.dart';
 import 'package:slaypay_cc/widget/text_properties.dart';
@@ -99,6 +96,7 @@ class CardHomeController extends GetxController {
     fontFamily: 'Billabong',
   );
   TextAlign _textAlign = TextAlign.center;
+
   addTextWidget() async {
     cardStack.value.add(
       Center(
@@ -192,7 +190,7 @@ class CardHomeController extends GetxController {
   void addImage({required String image}) {
     Widget _pattern = ImagesComponent(
       image: image,
-      photoCaseController: PhotoViewController(initialScale: 1),
+      photoCaseController: PhotoViewController(),
     );
     if (cardStack.value.length > 2) {
       cardStack.value.removeAt(0);
@@ -207,48 +205,29 @@ class CardHomeController extends GetxController {
   //==================================================================================
   void openColorPallete() {
     CustomBottomSheet(
-      customChild: Stack(
-        alignment: Alignment.topCenter,
-        children: [
-          ColorPallete(
-              onCloseTap: () {
-                Get.back();
-              },
-              selectedColor: cardSelectedColor.value,
-              selectedSolidColor: (ColorDetail colorDetail) {
-                cardSelectedColor.value = colorDetail;
-                if (undoList.value.isEmpty) {
-                  cardData = cardData.copyWith(cardBg: AppColors.accentColor);
-                  undoList.value.add(cardData);
-                }
-                cardData = cardData.copyWith(
-                    cardBg: colorDetail.color,
-                    patternData: PatternData(
-                        patternOpacity: patternOpacity.value,
-                        patternSize: patternSize.value,
-                        pattern: null));
+      customChild: ColorPallete(
+          onCloseTap: () {
+            Get.back();
+          },
+          selectedColor: cardSelectedColor.value,
+          selectedSolidColor: (ColorDetail colorDetail) {
+            cardSelectedColor.value = colorDetail;
+            if (undoList.value.isEmpty) {
+              cardData = cardData.copyWith(cardBg: AppColors.accentColor);
+              undoList.value.add(cardData);
+            }
+            cardData = cardData.copyWith(
+                cardBg: colorDetail.color,
+                patternData: PatternData(
+                    patternOpacity: patternOpacity.value,
+                    patternSize: patternSize.value,
+                    pattern: null));
 
+            cardData = cardData.copyWith(cardBg: colorDetail.color);
 
-                cardData = cardData.copyWith(cardBg: colorDetail.color);
-
-                undoList.value.add(cardData);
-                redoList.value.clear();
-              }),
-          ClipOval(
-            child: Material(
-              color: AppColors.accentColor, // Button color
-              child: InkWell(
-                splashColor: AppColors.accentColor, // Splash color
-                onTap: () {
-                  Get.back();
-                },
-                child: const SizedBox(
-                    width: 25, height: 25, child: Icon(Icons.clear)),
-              ),
-            ),
-          ),
-        ],
-      ),
+            undoList.value.add(cardData);
+            redoList.value.clear();
+          }),
     );
   }
 
@@ -268,18 +247,8 @@ class CardHomeController extends GetxController {
       customChild: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          ClipOval(
-            child: Material(
-              color: AppColors.accentColor, // Button color
-              child: InkWell(
-                splashColor: AppColors.accentColor, // Splash color
-                onTap: () {
-                  Get.back();
-                },
-                child: const SizedBox(
-                    width: 25, height: 25, child: Icon(Icons.clear)),
-              ),
-            ),
+          const SizedBox(
+            height: 20,
           ),
           Obx(() {
             return Row(
@@ -339,18 +308,8 @@ class CardHomeController extends GetxController {
       customChild: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          ClipOval(
-            child: Material(
-              color: AppColors.accentColor, // Button color
-              child: InkWell(
-                splashColor: AppColors.accentColor, // Splash color
-                onTap: () {
-                  Get.back();
-                },
-                child: const SizedBox(
-                    width: 25, height: 25, child: Icon(Icons.clear)),
-              ),
-            ),
+          const SizedBox(
+            height: 20,
           ),
           SizedBox(
             width: Get.width,
@@ -361,63 +320,100 @@ class CardHomeController extends GetxController {
                   padding: EdgeInsets.all(8.0),
                   child: Text("Choose your image :"),
                 ),
-                GestureDetector(
-                  onTap: () async {
-                    final ImagePicker _picker = ImagePicker();
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () async {
+                        final ImagePicker _picker = ImagePicker();
 
-                    final XFile? image =
-                        await _picker.pickImage(source: ImageSource.gallery);
+                        
+                        final XFile? image = await _picker.pickImage(
+                            source: ImageSource.gallery);
 
-                    if (image != null) {
-                      imageAngle.value = 0;
-                      blendColor.value = AppColors.accentColor;
-                      addImage(image: image.path);
-                    }
+                        if (image != null) {
+                          imageAngle.value = 0;
+                          blendColor.value = AppColors.accentColor;
+                          selectedImage.value = image.path;
+                          addImage(image: image.path);
+                        }
 
-                    selectedImage.value = image!.path;
-                    // homeController.isSheetOpen.value = false;
-                    // Get.back();
-                    // homeController.bottomNavVisible.value = false;
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      width: 70,
-                      padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(4),
-                        boxShadow: [
-                          BoxShadow(
-                            offset: const Offset(0, 3),
-                            blurRadius: 6,
-                            color: const Color(0xff000000).withOpacity(0.19),
+                        // homeController.isSheetOpen.value = false;
+                        // Get.back();
+                        // homeController.bottomNavVisible.value = false;
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          width: 70,
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4),
+                            boxShadow: [
+                              BoxShadow(
+                                offset: const Offset(0, 3),
+                                blurRadius: 6,
+                                color:
+                                    const Color(0xff000000).withOpacity(0.19),
+                              ),
+                            ],
+                            color: AppColors.accentColor,
                           ),
-                        ],
-                        color: AppColors.accentColor,
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(8),
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: AppColors.white,
-                            ),
-                            child: SvgPicture.asset(Assets.imagesUploadImage),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(8),
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: AppColors.white,
+                                ),
+                                child:
+                                    SvgPicture.asset(Assets.imagesUploadImage),
+                              ),
+                              const SizedBox(height: 8),
+                              const FittedBox(
+                                child: Text(
+                                  "Upload Picture",
+                                  style: TextStyle(
+                                      fontSize: 12, color: AppColors.white),
+                                ),
+                              )
+                            ],
                           ),
-                          const SizedBox(height: 8),
-                          const FittedBox(
-                            child: Text(
-                              "Upload Picture",
-                              style: TextStyle(
-                                  fontSize: 12, color: AppColors.white),
-                            ),
-                          )
-                        ],
+                        ),
                       ),
                     ),
-                  ),
+                    selectedImage.value.isNotEmpty
+                        ? GestureDetector(
+                            onTap: () {
+                              addImage(image: selectedImage.value);
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white.withOpacity(0.8),
+                                  border:
+                                      Border.all(color: AppColors.accentColor)),
+                              child: SizedBox(
+                                  width: 60,
+                                  height: 60,
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Image.file(
+                                        File(
+                                          selectedImage.value,
+                                        ),
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: Icon(Icons.edit),
+                                      ),
+                                    ],
+                                  )),
+                            ),
+                          )
+                        : const SizedBox()
+                  ],
                 )
               ],
             ),
@@ -433,18 +429,8 @@ class CardHomeController extends GetxController {
       customChild: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          ClipOval(
-            child: Material(
-              color: AppColors.accentColor, // Button color
-              child: InkWell(
-                splashColor: AppColors.accentColor, // Splash color
-                onTap: () {
-                  Get.back();
-                },
-                child: const SizedBox(
-                    width: 25, height: 25, child: Icon(Icons.clear)),
-              ),
-            ),
+          SizedBox(
+            height: 20,
           ),
           SizedBox(
               height: 70,
@@ -481,9 +467,8 @@ class CardHomeController extends GetxController {
         }
         if (cardSelectedPattern.value.pattern_data != null) {
           addUndoRedoPattern(cardSelectedPattern.value.pattern_data!);
-        }
-        else{
-          if(cardStack.value.length>2){
+        } else {
+          if (cardStack.value.length > 2) {
             cardStack.value.removeAt(0);
           }
         }

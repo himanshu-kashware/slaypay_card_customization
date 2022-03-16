@@ -7,7 +7,7 @@ class MainMenuOptions extends StatelessWidget {
   final IconData iconData;
   final String title;
 
-  const MainMenuOptions(
+   const MainMenuOptions(
       {required this.onTap, required this.iconData, required this.title});
 
   @override
