@@ -40,15 +40,7 @@ class CardHomeView extends GetView<CardHomeController> {
                   const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12),
               child: Row(
                 children: [
-                  ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    child: TextButton(
-                      onPressed: () {},
-                      child: const Text(
-                        "Next",
-                        style: TextStyle(
-                          color: AppColors.white,
-                        ),
+
                       ),
                       style: TextButton.styleFrom(
                           backgroundColor: AppColors.accentColor,
@@ -226,6 +218,8 @@ class CardHomeView extends GetView<CardHomeController> {
                                   MainMenuOptions(
                                     onTap: () {
                                       controller.openPatternPallete(
+
+
                                           onPatternSelected: (pattern) {
                                             // controller.cardData =
                                             //     controller.cardData.copyWith(
@@ -236,6 +230,7 @@ class CardHomeView extends GetView<CardHomeController> {
                                             //
                                             // controller.addToCardStack();
                                           },
+
                                           opacityValue:
                                               controller.patternOpacity.value,
                                           sizeValue:
@@ -243,26 +238,12 @@ class CardHomeView extends GetView<CardHomeController> {
                                           onOpacityChange: (double value) {
                                             controller.patternOpacity.value =
                                                 value;
-                                            // controller.cardData.copyWith(
-                                            //     patternData: controller
-                                            //         .patternData
-                                            //         .copyWith(
-                                            //             patternOpacity: value));
-                                            //
-                                            // controller.addToCardStack(
-                                            //     controller.cardData);
+
                                           },
                                           onSizeChange: (double value) {
                                             controller.patternSize.value =
                                                 value;
-                                            // controller.cardData.copyWith(
-                                            //     patternData: controller
-                                            //         .patternData
-                                            //         .copyWith(
-                                            //         patternSize: value));
-                                            //
-                                            // controller.addToCardStack(
-                                            //     controller.cardData);
+
                                           });
                                     },
                                     iconData: Icons.pattern,

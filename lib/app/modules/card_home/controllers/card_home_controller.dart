@@ -21,6 +21,7 @@ import 'package:slaypay_cc/widget/color_pallete.dart';
 import 'package:slaypay_cc/widget/custom_bottom_sheet_options.dart';
 import 'package:slaypay_cc/widget/flutter_text_widget/test.dart';
 import 'package:slaypay_cc/widget/pattern_pallete.dart';
+import 'package:slaypay_cc/widget/text_editor/text_editor.dart';
 import 'package:slaypay_cc/widget/text_properties.dart';
 
 import '../../image/images/images_view.dart';
@@ -91,11 +92,33 @@ class CardHomeController extends GetxController {
     'TropicalAsianDemoRegular',
     'VeganStyle',
   ];
-
+  RxString _text = ''.obs;
+  TextStyle _textStyle = const TextStyle(
+    // fontSize: 25,
+    color: Colors.black,
+    fontFamily: 'Billabong',
+  );
+  TextAlign _textAlign = TextAlign.center;
   addTextWidget() async {
-    //cardStack.value.add( ResizebleWidget(child: TextField(autofocus: true,),));
+    cardStack.value.add(
+      Center(
+        child: TextEditor(
+          fonts: fonts,
+          text: _text.value,
+          textStyle: _textStyle,
+          textAlingment: _textAlign,
+          minFontSize: 12,
+          onEditCompleted: (style, align, text) {
+            _text.value = text;
+            _textStyle = style;
+            _textAlign = align;
 
-    Get.to(HomePage());
+            isDone(true);
+            // hideBottomSheet(false);
+          },
+        ),
+      ),
+    );
   }
 
   @override
@@ -204,6 +227,9 @@ class CardHomeController extends GetxController {
                         patternOpacity: patternOpacity.value,
                         patternSize: patternSize.value,
                         pattern: null));
+
+
+                cardData = cardData.copyWith(cardBg: colorDetail.color);
 
                 undoList.value.add(cardData);
                 redoList.value.clear();
