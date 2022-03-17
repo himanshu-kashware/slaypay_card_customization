@@ -26,6 +26,9 @@ class ImagesComponent extends GetView<CardHomeController> {
           BlendMode.color,
         ),
         child: PhotoView(
+          loadingBuilder: (c,a){
+            return const Center(child: CircularProgressIndicator(color: Colors.white,));
+          },
           enableRotation: controller.isImageEditable.value,
           disableGestures: !controller.isImageEditable.value,
           controller: photoCaseController,

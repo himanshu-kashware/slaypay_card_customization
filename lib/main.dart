@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:shader_mask_animated/shader_mask_animated.dart';
 import 'package:slaypay_cc/app/routes/app_pages.dart';
 
 void main() {
@@ -9,7 +10,6 @@ void main() {
       .then((_) {
     runApp(const MyApp());
   });
-
 }
 
 class MyApp extends StatelessWidget {
@@ -21,8 +21,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-     initialRoute: AppPages.INITIAL,
+      initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
+
     );
   }
 }

@@ -21,6 +21,7 @@ import 'package:slaypay_cc/widget/pattern_pallete.dart';
 import 'package:slaypay_cc/widget/text_editor/text_editor.dart';
 import 'package:slaypay_cc/widget/text_properties.dart';
 
+import '../../../../widget/custom_overlay.dart';
 import '../../image/images/images_view.dart';
 
 class CardHomeController extends GetxController {
@@ -44,6 +45,7 @@ class CardHomeController extends GetxController {
   var blendColor = Colors.transparent.obs;
   final showFilter = false.obs;
   final selectedImage = ''.obs;
+  PhotoViewControllerBase controllerBase=PhotoViewController();
 
 //=====================================Text Fields ======================================
 
@@ -89,7 +91,7 @@ class CardHomeController extends GetxController {
     'TropicalAsianDemoRegular',
     'VeganStyle',
   ];
-  RxString _text = ''.obs;
+  final RxString _text = ''.obs;
   TextStyle _textStyle = const TextStyle(
     // fontSize: 25,
     color: Colors.black,
@@ -187,10 +189,14 @@ class CardHomeController extends GetxController {
 
   //=================================Add Image ========================
 
-  void addImage({required String image}) {
+  void addImage({required String image, required bool isEdit}) {
+
+    if(!isEdit){
+      controllerBase=PhotoViewController();
+    }
     Widget _pattern = ImagesComponent(
       image: image,
-      photoCaseController: PhotoViewController(),
+      photoCaseController: controllerBase,
     );
     if (cardStack.value.length > 2) {
       cardStack.value.removeAt(0);
@@ -326,20 +332,17 @@ class CardHomeController extends GetxController {
                       onTap: () async {
                         final ImagePicker _picker = ImagePicker();
 
-                        
-                        final XFile? image = await _picker.pickImage(
+                        final XFile? image = await _picker.pickImage(imageQuality: 10,
                             source: ImageSource.gallery);
+
 
                         if (image != null) {
                           imageAngle.value = 0;
                           blendColor.value = AppColors.accentColor;
                           selectedImage.value = image.path;
-                          addImage(image: image.path);
+                          addImage(image: image.path,isEdit: false);
                         }
 
-                        // homeController.isSheetOpen.value = false;
-                        // Get.back();
-                        // homeController.bottomNavVisible.value = false;
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -386,7 +389,7 @@ class CardHomeController extends GetxController {
                     selectedImage.value.isNotEmpty
                         ? GestureDetector(
                             onTap: () {
-                              addImage(image: selectedImage.value);
+                              addImage(image: selectedImage.value,isEdit:true);
                             },
                             child: Container(
                               decoration: BoxDecoration(
