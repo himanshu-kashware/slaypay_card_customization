@@ -1,18 +1,11 @@
 library text_editor;
 
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:slaypay_cc/widget/text_editor/src/font_option_model.dart';
 import 'package:slaypay_cc/widget/text_editor/src/text_style_model.dart';
 import 'package:slaypay_cc/widget/text_editor/text_editor_data.dart';
 import '../resizable_text.dart';
-import 'src/widget/color_palette.dart';
-import 'src/widget/font_family.dart';
-import 'src/widget/font_option_switch.dart';
-import 'src/widget/font_size.dart';
-import 'src/widget/text_alignment.dart';
-import 'src/widget/text_background_color.dart';
 
 RxBool isDone = true.obs;
 RxInt activeField = 1.obs;
@@ -88,6 +81,7 @@ class TextEditor extends StatefulWidget {
 class _TextEditorState extends State<TextEditor> {
   late TextStyleModel _textStyleModel;
   late FontOptionModel _fontOptionModel;
+
   // late TextStyleModelTwo _textStyleModelTwo;
   // late FontOptionModelTwo _fontOptionModelTwo;
   // late TextStyleModelThree _textStyleModelThree;
@@ -170,74 +164,11 @@ class _TextEditorState extends State<TextEditor> {
       child: TextEditorData(
         textStyleModel: _textStyleModel,
         fontOptionModel: _fontOptionModel,
-        // textStyleModelTwo: _textStyleModelTwo,
-        // fontOptionModelTwo: _fontOptionModelTwo,
-        // textStyleModelThree: _textStyleModelThree,
-        // fontOptionModelThree: _fontOptionModelThree,
         child: Container(
-          // padding: EdgeInsets.only(right: 10, left: 10),
           color: Colors.transparent,
           child: Center(
             child: Stack(
-              // mainAxisAlignment: MainAxisAlignment.center,
-              // crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Row(
-                //   children: [
-                //     // Expanded(child: Container()),
-                //     // Expanded(
-                //     //   flex: 3,
-                //     //   child: Obx(
-                //     //     () => isDone.value == false
-                //     //         ? Row(
-                //     //             mainAxisAlignment: MainAxisAlignment.center,
-                //     //             children: [
-                //     //               TextAlignment(
-                //     //                 left: widget.decoration?.alignment?.left,
-                //     //                 center:
-                //     //                     widget.decoration?.alignment?.center,
-                //     //                 right: widget.decoration?.alignment?.right,
-                //     //               ),
-                //     //               SizedBox(width: 20),
-                //     //               FontOptionSwitch(
-                //     //                 fontFamilySwitch:
-                //     //                     widget.decoration?.fontFamily,
-                //     //                 colorPaletteSwitch:
-                //     //                     widget.decoration?.colorPalette,
-                //     //               ),
-                //     //               SizedBox(width: 20),
-                //     //               TextBackgroundColor(
-                //     //                 enableWidget: widget
-                //     //                     .decoration?.textBackground?.enable,
-                //     //                 disableWidget: widget
-                //     //                     .decoration?.textBackground?.disable,
-                //     //               ),
-                //     //             ],
-                //     //           )
-                //     //         : const SizedBox(
-                //     //             height: 25,
-                //     //           ),
-                //     //   ),
-                //     // ),
-
-                //     // Expanded(
-                //     //   child: Obx(
-                //     //     () => isDone.value == false
-                //     //         ? Align(
-                //     //             alignment: Alignment.centerRight,
-                //     //             child: GestureDetector(
-                //     //               onTap: _editCompleteHandler,
-                //     //               child: _doneButton,
-                //     //             ),
-                //     //           )
-                //     //         : const SizedBox(
-                //     //             height: 16,
-                //     //           ),
-                //     //   ),
-                //     // ),
-                //   ],
-                // ),
-
                 Obx(
                   () => Visibility(
                     visible: showOne.value,
@@ -251,20 +182,21 @@ class _TextEditorState extends State<TextEditor> {
                           child: TextField(
                             controller: TextEditingController()
                               ..text = _textStyleModel.text,
+
                             onChanged: (value) {
                               _textStyleModel.text = value;
-                              // isDone(false);
                             },
                             onTap: () {
                               activeField(0);
                               textFieldActive(true);
                               isDone(false);
                             },
-                            maxLines: 1,
+                            maxLines: null,
                             style: _textStyleModel.textStyle,
                             textAlign: _textStyleModel.textAlign!,
                             autofocus: false,
                             cursorColor: Colors.white,
+
                             decoration: const InputDecoration(
                               hintText: "Enter Text",
                               border: InputBorder.none,
@@ -275,223 +207,6 @@ class _TextEditorState extends State<TextEditor> {
                     ),
                   ),
                 ),
-
-                // Obx(
-                //   () => Visibility(
-                //     visible: showTwo.value,
-                //     child: Positioned(
-                //       child: Transform.rotate(
-                //         angle: -pi / angleTwo.value,
-                //         child: Center(
-                //           child: ResizebleTextWidgetTwo(
-                //             isDone: isDone.value,
-                //             isText: true,
-                //             width: 150,
-                //             height: 50,
-                //             child: TextField(
-                //               controller: TextEditingController()
-                //                 ..text = _textStyleModelTwo.text,
-                //               onChanged: (value) {
-                //                 _textStyleModelTwo.text = value;
-                //                 // isDone(false);
-                //               },
-                //               onTap: () {
-                //                 activeField(1);
-                //                 textFieldActive(true);
-                //                 isDone(false);
-                //               },
-                //               maxLines: 1,
-                //               style: _textStyleModelTwo.textStyle,
-                //               textAlign: _textStyleModelTwo.textAlign!,
-                //               autofocus: false,
-                //               cursorColor: Colors.white,
-                //               decoration: const InputDecoration(
-                //                 hintText: "Enter Text",
-                //                 border: InputBorder.none,
-                //               ),
-                //             ),
-                //           ),
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
-                // Obx(
-                //   () => Visibility(
-                //     visible: showThree.value,
-                //     child: Positioned(
-                //       child: Transform.rotate(
-                //         angle: -pi / angleThree.value,
-                //         child: Center(
-                //           child: ResizebleTextWidgetThree(
-                //             isDone: isDone.value,
-                //             isText: true,
-                //             width: 150,
-                //             height: 50,
-                //             child: TextField(
-                //               controller: TextEditingController()
-                //                 ..text = _textStyleModelThree.text,
-                //               onChanged: (value) {
-                //                 _textStyleModelThree.text = value;
-                //                 // isDone(false);
-                //               },
-                //               onTap: () {
-                //                 activeField(2);
-                //                 textFieldActive(true);
-                //                 isDone(false);
-                //               },
-                //               maxLines: 1,
-                //               style: _textStyleModelThree.textStyle,
-                //               textAlign: _textStyleModelThree.textAlign!,
-                //               autofocus: false,
-                //               cursorColor: Colors.white,
-                //               decoration: const InputDecoration(
-                //                 hintText: "Enter Text",
-                //                 border: InputBorder.none,
-                //               ),
-                //             ),
-                //           ),
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
-
-                // Obx(
-                //   () => isDone.value == false && fontTypeActive.value == true
-                //       ? Align(
-                //           alignment: Alignment.bottomCenter,
-                //           child: Container(
-                //             width: Get.width,
-                //             height: 108,
-                //             decoration: const BoxDecoration(
-                //                 gradient: LinearGradient(
-                //               begin: Alignment.topCenter,
-                //               end: Alignment.bottomCenter,
-                //               colors: [Color(0xffFBFBFB), Color(0xffE0E0E0)],
-                //             )),
-                //             child: _fontOptionModel.status ==
-                //                     FontOptionStatus.fontFamily
-                //                 ? Center(
-                //                     child: Column(
-                //                       children: [
-                //                         const SizedBox(
-                //                           height: 30,
-                //                         ),
-                //                         FontFamily(
-                //                           _fontOptionModel.fonts,
-                //                           // _fontOptionModelTwo.fonts,
-                //                           // _fontOptionModelThree.fonts,
-                //                         ),
-                //                         const SizedBox(
-                //                           height: 20,
-                //                         ),
-                //                       ],
-                //                     ),
-                //                   )
-                //                 : ColorPalette(_fontOptionModel.colors!),
-                //           ),
-                //         )
-                //       : const SizedBox(),
-                // ),
-
-                // Obx(
-                //   () => isDone.value == false
-                //       ? Align(
-                //           alignment: Alignment.bottomCenter,
-                //           child: Container(
-                //             width: Get.width,
-                //             height: 108,
-                //             decoration: const BoxDecoration(
-                //                 gradient: LinearGradient(
-                //               begin: Alignment.topCenter,
-                //               end: Alignment.bottomCenter,
-                //               colors: [Color(0xffFBFBFB), Color(0xffE0E0E0)],
-                //             )),
-                //             child: _fontOptionModel.status ==
-                //                     FontOptionStatus.fontFamily
-                //                 ? Center(
-                //                     child: Column(
-                //                       children: [
-                //                         const SizedBox(
-                //                           height: 30,
-                //                         ),
-                //                         ColorPalette(_fontOptionModel.colors!),
-                //                         const SizedBox(
-                //                           height: 20,
-                //                         ),
-                //                       ],
-                //                     ),
-                //                   )
-                //                 : FontFamily(
-                //                     _fontOptionModel.fonts,
-                //                     // _fontOptionModelTwo.fonts,
-                //                     // _fontOptionModelThree.fonts,
-                //                   ),
-                //           ),
-                //         )
-                //       : const SizedBox(),
-                // ),
-
-                // Obx(
-                //   () => isDone.value == false && emojiActiva.value == true
-                //       ? Container(
-                //           width: Get.width,
-                //           decoration: const BoxDecoration(
-                //               gradient: LinearGradient(
-                //             begin: Alignment.topCenter,
-                //             end: Alignment.bottomCenter,
-                //             colors: [Color(0xffFBFBFB), Color(0xffE0E0E0)],
-                //           )),
-                //           child: _fontOptionModel.status ==
-                //                   FontOptionStatus.fontFamily
-                //               ? Center(
-                //                   child: Column(
-                //                     children: [
-                //                       const SizedBox(
-                //                         height: 30,
-                //                       ),
-                //                       SizedBox(
-                //                         width: Get.width,
-                //                         height: 60,
-                //                         child: Center(
-                //                           child: ListView.builder(
-                //                               scrollDirection: Axis.horizontal,
-                //                               itemCount:
-                //                                   Strings.emojies.length - 6,
-                //                               shrinkWrap: true,
-                //                               itemBuilder: (context, index) {
-                //                                 return GestureDetector(
-                //                                   onTap: () {
-                //                                     currentEmoji(
-                //                                         Strings.emojies[index]);
-                //                                   },
-                //                                   child: Center(
-                //                                     child: Padding(
-                //                                       padding:
-                //                                           const EdgeInsets.all(
-                //                                               8.0),
-                //                                       child: Text(
-                //                                         Strings.emojies[index],
-                //                                         style: const TextStyle(
-                //                                             fontSize: 36),
-                //                                       ),
-                //                                     ),
-                //                                   ),
-                //                                 );
-                //                               }),
-                //                         ),
-                //                       ),
-                //                       const SizedBox(
-                //                         height: 20,
-                //                       ),
-                //                     ],
-                //                   ),
-                //                 )
-                //               : FontFamily(_fontOptionModel.fonts),
-                //         )
-                //       : const SizedBox(),
-                // ),
               ],
             ),
           ),

@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:slaypay_cc/app/model/card_data.dart';
 import 'package:slaypay_cc/app/model/pattern.dart';
+import 'package:slaypay_cc/app/model/text_data.dart';
 import 'package:slaypay_cc/app/modules/image/filters.dart';
 import 'package:slaypay_cc/constants/app_colors.dart';
 import 'package:slaypay_cc/generated/assets.dart';
@@ -21,6 +22,7 @@ import 'package:slaypay_cc/widget/pattern_pallete.dart';
 import 'package:slaypay_cc/widget/text_editor/text_editor.dart';
 import 'package:slaypay_cc/widget/text_properties.dart';
 
+import '../../../../util/font_pallete.dart';
 import '../../../../widget/custom_overlay.dart';
 import '../../image/images/images_view.dart';
 
@@ -63,6 +65,14 @@ class CardHomeController extends GetxController {
 
   final redoList = RxList<CardData>().obs;
 
+  //================================================================================================
+
+  final textList=RxList<TextData>().obs;
+
+
+
+
+
   @override
   void onInit() {
     addDefaultWidget();
@@ -70,6 +80,8 @@ class CardHomeController extends GetxController {
         patternData: patternData, cardBg: AppColors.accentColor, image: null);
     super.onInit();
   }
+
+  //====================================================================================
 
   final fonts = [
     'OpenSans',
@@ -432,7 +444,7 @@ class CardHomeController extends GetxController {
       customChild: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(
+          const SizedBox(
             height: 20,
           ),
           SizedBox(
@@ -447,7 +459,7 @@ class CardHomeController extends GetxController {
       ),
     );
   }
-
+//=================================Undo ===================================
   void undo() {
     if (undoList.value.isNotEmpty) {
       redoList.value.add(undoList.value.last);
@@ -475,11 +487,15 @@ class CardHomeController extends GetxController {
             cardStack.value.removeAt(0);
           }
         }
-      } catch (e) {}
+      } catch (e) {
+
+      }
     } else {
       cardSelectedColor(ColorDetail.name(true, AppColors.accentColor));
     }
   }
+
+  //===============================================Redo =====================================
 
   void redo() {
     if (redoList.value.isNotEmpty) {
@@ -500,5 +516,21 @@ class CardHomeController extends GetxController {
       }
       redoList.value.removeLast();
     } else {}
+  }
+
+  //======================================Text Dialog =================
+
+  void openTextDialog({required TextData addedText}) {
+    CustomBottomSheet(
+      customChild: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(
+            height: 20,
+          ),
+          FontPallete(addedText)
+        ],
+      ),
+    );
   }
 }

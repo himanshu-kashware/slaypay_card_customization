@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 
 import '../constants/app_colors.dart';
 
-CustomBottomSheet({required Widget customChild}) {
+void CustomBottomSheet({required Widget customChild}) {
   Get.bottomSheet(
       Stack(
         alignment: Alignment.topCenter,
@@ -34,6 +34,7 @@ CustomBottomSheet({required Widget customChild}) {
       ),
       persistent: false,
       ignoreSafeArea: true,
+      isDismissible: false,
       enableDrag: false,
       elevation: 30,
       isScrollControlled: false,
@@ -45,3 +46,4 @@ CustomBottomSheet({required Widget customChild}) {
         topRight: Radius.circular(30.0),
       )));
 }
+

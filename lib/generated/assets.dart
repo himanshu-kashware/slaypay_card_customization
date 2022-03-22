@@ -37,6 +37,7 @@ class Assets {
   static const String imagesClose = 'assets/images/close.svg';
   static const String imagesCo = 'assets/images/co.png';
   static const String imagesDuplicateIcon = 'assets/images/duplicate_icon.svg';
+  static const String imagesEmoji = 'assets/images/emoji.svg';
   static const String imagesIconsClose = 'assets/images/icons_close.svg';
   static const String imagesImage = 'assets/images/image.svg';
   static const String imagesLogo = 'assets/images/logo.svg';
@@ -47,6 +48,8 @@ class Assets {
   static const String imagesSmileyActive = 'assets/images/smiley_active.svg';
   static const String imagesSmileyInactive = 'assets/images/smiley_inactive.svg';
   static const String imagesText = 'assets/images/text.svg';
+  static const String imagesTextColor = 'assets/images/text_color.svg';
+  static const String imagesTextStyle = 'assets/images/text_style.svg';
   static const String imagesTick = 'assets/images/tick.svg';
   static const String imagesUndo = 'assets/images/undo.png';
   static const String imagesUploadImage = 'assets/images/upload_image.svg';
