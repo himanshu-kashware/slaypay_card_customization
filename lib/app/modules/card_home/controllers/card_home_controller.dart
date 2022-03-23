@@ -220,12 +220,10 @@ class CardHomeController extends GetxController {
     isImageEditable(true);
     Get.back();
   }
+
   //=====================================Add Image ==============================================
 
-
   void addUndoImage({required String image}) {
-
-
     Widget _pattern = ImagesComponent(
       image: image,
     );
@@ -377,7 +375,7 @@ class CardHomeController extends GetxController {
                           imageData.imagePosY = 0;
                           imageData.imageColor = blendColor.value;
                           imageData.imageAngle = 0;
-                          imageData.imageScale=1;
+                          imageData.imageScale = 1;
                           cardData = cardData.copyWith(imageData: imageData);
                           undoList.value.add(cardData);
                           addImage(image: image.path, isEdit: false);
@@ -519,17 +517,22 @@ class CardHomeController extends GetxController {
       } catch (e) {}
 
       try {
-        if (cardData.imageData != null) {
-          if (cardData.imageData!.image != null) {
-            selectedImage.value = cardData.imageData!.image!;
-            imageAngle.value = cardData.imageData!.imageAngle!;
-            blendColor.value = cardData.imageData!.imageColor!;
+        if (undoList.value.last.imageData != null) {
+          if (undoList.value.last.imageData!.image != null) {
+            selectedImage.value = undoList.value.last.imageData!.image!;
+            imageAngle.value = undoList.value.last.imageData!.imageAngle!;
+            blendColor.value = undoList.value.last.imageData!.imageColor!;
             controllerBase.value.position = Offset(
-                cardData.imageData!.imagePosX!, cardData.imageData!.imagePosY!);
-            controllerBase.value.rotation = cardData.imageData!.imageAngle!;
-            controllerBase.value.scale = cardData.imageData!.imageScale!;
-            addImage(image: cardData.imageData!.image!, isEdit: false);
+                undoList.value.last.imageData!.imagePosX!,
+                undoList.value.last.imageData!.imagePosY!);
+            controllerBase.value.rotation =
+                undoList.value.last.imageData!.imageAngle!;
+            controllerBase.value.scale =
+                undoList.value.last.imageData!.imageScale!;
+            addUndoImage(image: undoList.value.last.imageData!.image!);
           }
+        } else {
+          selectedImage.value = '';
         }
       } catch (e) {}
     } else {
@@ -557,19 +560,23 @@ class CardHomeController extends GetxController {
         }
       }
       try {
-        if (cardData.imageData != null) {
-          if (cardData.imageData!.image != null) {
-            selectedImage.value = cardData.imageData!.image!;
-            imageAngle.value = cardData.imageData!.imageAngle!;
-            blendColor.value = cardData.imageData!.imageColor!;
+        if (redoList.value.last.imageData != null) {
+          if (redoList.value.last.imageData!.image != null) {
+            selectedImage.value = redoList.value.last.imageData!.image!;
+            imageAngle.value = redoList.value.last.imageData!.imageAngle!;
+            blendColor.value = redoList.value.last.imageData!.imageColor!;
             controllerBase.value.position = Offset(
-                cardData.imageData!.imagePosX!, cardData.imageData!.imagePosY!);
-            controllerBase.value.rotation = cardData.imageData!.imageAngle!;
-            controllerBase.value.scale = cardData.imageData!.imageScale!;
-            addUndoImage(image: cardData.imageData!.image!);
+                redoList.value.last.imageData!.imagePosX!,
+                redoList.value.last.imageData!.imagePosY!);
+            controllerBase.value.rotation =
+                redoList.value.last.imageData!.imageAngle!;
+            controllerBase.value.scale =
+                redoList.value.last.imageData!.imageScale!;
+            addUndoImage(image: redoList.value.last.imageData!.image!);
           }
+        } else {
+          selectedImage.value = '';
         }
-
       } catch (e) {}
       redoList.value.removeLast();
     } else {}
