@@ -1,21 +1,12 @@
-import 'package:auto_size_text_field/auto_size_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:slaypay_cc/app/model/pattern.dart';
-import 'package:slaypay_cc/app/model/text_data.dart';
 import 'package:slaypay_cc/constants/app_colors.dart';
 import 'package:slaypay_cc/generated/assets.dart';
-import 'package:slaypay_cc/widget/resizable_text.dart';
 import 'package:slaypay_cc/widget/show_animated_bottom_sheet.dart';
 import 'package:slaypay_cc/widget/customDialog.dart';
 import 'package:slaypay_cc/widget/main_menu_options.dart';
-import '../../../../widget/flutter_text_widget/resizable_widget.dart';
-import '../../../../widget/flutter_text_widget/resizable_widget_controller.dart';
-import '../../../../widget/flutter_text_widget/test.dart';
-import '../../../../widget/moveable_text.dart';
-import '../../../../widget/text_editor/text_editor.dart';
 import '../controllers/card_home_controller.dart';
 
 class CardHomeView extends GetView<CardHomeController> {
@@ -184,7 +175,7 @@ class CardHomeView extends GetView<CardHomeController> {
                               controller.redo();
                             },
                             child: CircleAvatar(
-                              backgroundColor: Color(0xff6F7FAF),
+                              backgroundColor: const Color(0xff6F7FAF),
                               child: Icon(
                                 Icons.redo,
                                 color: controller.redoList.value.isNotEmpty
@@ -201,9 +192,9 @@ class CardHomeView extends GetView<CardHomeController> {
                               });
                             },
                             child: CircleAvatar(
-                                backgroundColor: Color(0xff6F7FAF),
+                                backgroundColor: const Color(0xff6F7FAF),
                                 child: SvgPicture.asset(Assets.imagesRemove))),
-                        SizedBox()
+                        const SizedBox()
                       ],
                     ),
                   );
@@ -260,31 +251,31 @@ class CardHomeView extends GetView<CardHomeController> {
                                     iconData: Icons.image,
                                     title: 'Image',
                                   ),
-                                  MainMenuOptions(
-                                    onTap: () {
-                                      controller.textList.value.add(
-                                        TextData(
-                                            textString: "text",
-                                            textColor: Colors.black,
-                                            textPositionX: 0,
-                                            textPositionY: 0,
-                                            textRotationAngle: 0),
-                                      );
-
-                                      controller.cardStack.value
-                                          .add(MovableText(
-                                        xPosition: 0,
-                                        color: Colors.brown,
-                                        yPosition: 0,
-                                      ));
-
-                                      controller.openTextDialog(
-                                          addedText:
-                                              controller.textList.value.last);
-                                    },
-                                    iconData: Icons.font_download_outlined,
-                                    title: 'Add Text',
-                                  ),
+                                  // MainMenuOptions(
+                                  //   onTap: () {
+                                  //     controller.textList.value.add(
+                                  //       TextData(
+                                  //           textString: "text",
+                                  //           textColor: Colors.black,
+                                  //           textPositionX: 0,
+                                  //           textPositionY: 0,
+                                  //           textRotationAngle: 0),
+                                  //     );
+                                  //
+                                  //     controller.cardStack.value
+                                  //         .add(MovableText(
+                                  //       xPosition: 0,
+                                  //       color: Colors.brown,
+                                  //       yPosition: 0,
+                                  //     ));
+                                  //
+                                  //     controller.openTextDialog(
+                                  //         addedText:
+                                  //             controller.textList.value.last);
+                                  //   },
+                                  //   iconData: Icons.font_download_outlined,
+                                  //   title: 'Add Text',
+                                  // ),
                                 ],
                               ),
                             ),

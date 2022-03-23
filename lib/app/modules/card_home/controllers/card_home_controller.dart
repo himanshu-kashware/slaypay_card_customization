@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:slaypay_cc/app/model/card_data.dart';
+import 'package:slaypay_cc/app/model/image_data.dart';
 import 'package:slaypay_cc/app/model/pattern.dart';
 import 'package:slaypay_cc/app/model/text_data.dart';
 import 'package:slaypay_cc/app/modules/image/filters.dart';
@@ -43,11 +44,13 @@ class CardHomeController extends GetxController {
   //======================Image Editable ==========================================
 
   final isImageEditable = false.obs;
+  final imagePosX = 0.0.obs;
+  final imagePosY = 0.0.obs;
   var imageAngle = 0.0.obs;
   var blendColor = Colors.transparent.obs;
   final showFilter = false.obs;
   final selectedImage = ''.obs;
-  PhotoViewControllerBase controllerBase=PhotoViewController();
+  final controllerBase = PhotoViewController().obs;
 
 //=====================================Text Fields ======================================
 
@@ -67,17 +70,15 @@ class CardHomeController extends GetxController {
 
   //================================================================================================
 
-  final textList=RxList<TextData>().obs;
-
-
-
-
+  final textList = RxList<TextData>().obs;
 
   @override
   void onInit() {
     addDefaultWidget();
     cardData = CardData(
-        patternData: patternData, cardBg: AppColors.accentColor, image: null);
+        patternData: patternData,
+        cardBg: AppColors.accentColor,
+        imageData: null);
     super.onInit();
   }
 
@@ -157,6 +158,7 @@ class CardHomeController extends GetxController {
     );
     cardStack.value.add(_chipView);
     cardStack.value.add(_visaView);
+    cardSelectedColor.value = ColorDetail.name(true, AppColors.accentColor);
   }
 
   //=== Add Pattern==================================================
@@ -202,13 +204,12 @@ class CardHomeController extends GetxController {
   //=================================Add Image ========================
 
   void addImage({required String image, required bool isEdit}) {
-
-    if(!isEdit){
-      controllerBase=PhotoViewController();
+    if (!isEdit) {
+      controllerBase.value = PhotoViewController();
     }
+
     Widget _pattern = ImagesComponent(
       image: image,
-      photoCaseController: controllerBase,
     );
     if (cardStack.value.length > 2) {
       cardStack.value.removeAt(0);
@@ -217,6 +218,24 @@ class CardHomeController extends GetxController {
       cardStack.value.insert(0, _pattern);
     }
     isImageEditable(true);
+    Get.back();
+  }
+  //=====================================Add Image ==============================================
+
+
+  void addUndoImage({required String image}) {
+
+
+    Widget _pattern = ImagesComponent(
+      image: image,
+    );
+    if (cardStack.value.length > 2) {
+      cardStack.value.removeAt(0);
+      cardStack.value.insert(0, _pattern);
+    } else {
+      cardStack.value.insert(0, _pattern);
+    }
+    isImageEditable(false);
     Get.back();
   }
 
@@ -344,17 +363,25 @@ class CardHomeController extends GetxController {
                       onTap: () async {
                         final ImagePicker _picker = ImagePicker();
 
-                        final XFile? image = await _picker.pickImage(imageQuality: 10,
+                        final XFile? image = await _picker.pickImage(
                             source: ImageSource.gallery);
-
 
                         if (image != null) {
                           imageAngle.value = 0;
-                          blendColor.value = AppColors.accentColor;
+                          blendColor.value = Colors.transparent;
                           selectedImage.value = image.path;
-                          addImage(image: image.path,isEdit: false);
-                        }
 
+                          final imageData = ImageData();
+                          imageData.image = image.path;
+                          imageData.imagePosX = 0;
+                          imageData.imagePosY = 0;
+                          imageData.imageColor = blendColor.value;
+                          imageData.imageAngle = 0;
+                          imageData.imageScale=1;
+                          cardData = cardData.copyWith(imageData: imageData);
+                          undoList.value.add(cardData);
+                          addImage(image: image.path, isEdit: false);
+                        }
                       },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
@@ -401,7 +428,8 @@ class CardHomeController extends GetxController {
                     selectedImage.value.isNotEmpty
                         ? GestureDetector(
                             onTap: () {
-                              addImage(image: selectedImage.value,isEdit:true);
+                              addImage(
+                                  image: selectedImage.value, isEdit: true);
                             },
                             child: Container(
                               decoration: BoxDecoration(
@@ -459,6 +487,7 @@ class CardHomeController extends GetxController {
       ),
     );
   }
+
 //=================================Undo ===================================
   void undo() {
     if (undoList.value.isNotEmpty) {
@@ -487,9 +516,22 @@ class CardHomeController extends GetxController {
             cardStack.value.removeAt(0);
           }
         }
-      } catch (e) {
+      } catch (e) {}
 
-      }
+      try {
+        if (cardData.imageData != null) {
+          if (cardData.imageData!.image != null) {
+            selectedImage.value = cardData.imageData!.image!;
+            imageAngle.value = cardData.imageData!.imageAngle!;
+            blendColor.value = cardData.imageData!.imageColor!;
+            controllerBase.value.position = Offset(
+                cardData.imageData!.imagePosX!, cardData.imageData!.imagePosY!);
+            controllerBase.value.rotation = cardData.imageData!.imageAngle!;
+            controllerBase.value.scale = cardData.imageData!.imageScale!;
+            addImage(image: cardData.imageData!.image!, isEdit: false);
+          }
+        }
+      } catch (e) {}
     } else {
       cardSelectedColor(ColorDetail.name(true, AppColors.accentColor));
     }
@@ -514,6 +556,21 @@ class CardHomeController extends GetxController {
           print(e);
         }
       }
+      try {
+        if (cardData.imageData != null) {
+          if (cardData.imageData!.image != null) {
+            selectedImage.value = cardData.imageData!.image!;
+            imageAngle.value = cardData.imageData!.imageAngle!;
+            blendColor.value = cardData.imageData!.imageColor!;
+            controllerBase.value.position = Offset(
+                cardData.imageData!.imagePosX!, cardData.imageData!.imagePosY!);
+            controllerBase.value.rotation = cardData.imageData!.imageAngle!;
+            controllerBase.value.scale = cardData.imageData!.imageScale!;
+            addUndoImage(image: cardData.imageData!.image!);
+          }
+        }
+
+      } catch (e) {}
       redoList.value.removeLast();
     } else {}
   }

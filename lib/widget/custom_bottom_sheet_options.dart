@@ -34,7 +34,7 @@ void CustomBottomSheet({required Widget customChild}) {
       ),
       persistent: false,
       ignoreSafeArea: true,
-      isDismissible: false,
+      isDismissible: true,
       enableDrag: false,
       elevation: 30,
       isScrollControlled: false,
