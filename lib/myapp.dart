@@ -22,6 +22,6 @@ class SlayPayCustomize extends StatelessWidget {
 
 
     return CardHomeView();
->>>>>>> parent of 74735eb (changes)
+
   }
 }
