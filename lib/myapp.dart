@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:shader_mask_animated/shader_mask_animated.dart';
+
 import 'package:slaypay_cc/app/routes/app_pages.dart';
 
 void main() {
@@ -27,4 +27,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

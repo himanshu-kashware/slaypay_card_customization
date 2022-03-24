@@ -8,7 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:slaypay_cc/main.dart';
+import 'package:slaypay_cc/slaypay_customization_plugin.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {

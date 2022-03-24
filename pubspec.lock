@@ -478,15 +478,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.1"
-  shader_mask_animated:
-    dependency: "direct main"
-    description:
-      path: shader_mask_animated
-      ref: HEAD
-      resolved-ref: "193a8e4050317d398385149f432f15318bfa773e"
-      url: "https://github.com/kashware/flutter_custom_plugin.git"
-    source: git
-    version: "0.0.1"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -619,5 +610,5 @@ packages:
     source: hosted
     version: "3.1.0"
 sdks:
-  dart: ">=2.16.1 <3.0.0"
+  dart: ">=2.15.1 <3.0.0"
   flutter: ">=2.10.0-0"

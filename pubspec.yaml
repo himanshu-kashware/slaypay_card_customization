@@ -48,10 +48,7 @@ dependencies:
   photo_view: ^0.13.0
   scroll_to_index: ^2.1.1
 
-  shader_mask_animated:
-    git:
-      url:  https://github.com/kashware/flutter_custom_plugin.git
-      path: shader_mask_animated
+
 
 
 dev_dependencies:
