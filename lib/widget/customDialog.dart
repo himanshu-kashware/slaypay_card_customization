@@ -31,7 +31,7 @@ showCustomDialog({required VoidCallback onTap}) {
                       width: 549,
                       color: const Color(0xffF7CCD6),
                       child: Image.asset(
-                        Assets.imagesBin,
+                        Assets.cardImagesBin,
                         fit: BoxFit.fill,
                       ),
                     ),

@@ -28,7 +28,7 @@ class CardHomeView extends GetView<CardHomeController> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               SvgPicture.asset(
-                Assets.imagesLogo,
+                Assets.cardImagesLogo,
                 color: AppColors.black,
                 height: 33,
                 width: 35,
@@ -66,7 +66,7 @@ class CardHomeView extends GetView<CardHomeController> {
             children: [
               Positioned.fill(
                 child: Image.asset(
-                  Assets.imagesBackground,
+                  Assets.cardImagesBackground,
                   repeat: ImageRepeat.repeat,
                   fit: BoxFit.cover,
                 ),
@@ -193,7 +193,7 @@ class CardHomeView extends GetView<CardHomeController> {
                             },
                             child: CircleAvatar(
                                 backgroundColor: const Color(0xff6F7FAF),
-                                child: SvgPicture.asset(Assets.imagesRemove))),
+                                child: SvgPicture.asset(Assets.cardImagesRemove))),
                         const SizedBox()
                       ],
                     ),

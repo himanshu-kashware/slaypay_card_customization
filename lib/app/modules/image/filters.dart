@@ -34,7 +34,7 @@ class MakeFilter extends StatelessWidget {
                 width: 56,
                 child: Center(
                     child: SvgPicture.asset(
-                  Assets.imagesArrowLeft,
+                  Assets.cardImagesArrowLeft,
                   height: 20,
                 )),
                 // child: Center(child: Icon(Icons.arrow_back_ios_rounded)),
@@ -59,7 +59,7 @@ class MakeFilter extends StatelessWidget {
                           child: index == 0
                               ? Center(
                                   child: SvgPicture.asset(
-                                    Assets.imagesBlock,
+                                    Assets.cardImagesBlock,
                                     fit: BoxFit.fill,
                                   ),
                                 )
@@ -100,7 +100,7 @@ class MakeFilter extends StatelessWidget {
                 width: 56,
                 child: Center(
                     child: SvgPicture.asset(
-                  Assets.imagesArrowRight,
+                  Assets.cardImagesArrowRight,
                   height: 20,
                 )),
               ),

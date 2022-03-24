@@ -142,7 +142,7 @@ class CardHomeController extends GetxController {
       top: 70,
       left: 45,
       child: SvgPicture.asset(
-        Assets.imagesChip,
+        Assets.cardImagesChip,
         height: 35,
         width: 35,
       ),
@@ -151,7 +151,7 @@ class CardHomeController extends GetxController {
       bottom: 20,
       right: 25,
       child: SvgPicture.asset(
-        Assets.imagesVisa,
+        Assets.cardImagesVisa,
         height: 20,
         width: 30,
       ),
@@ -408,7 +408,7 @@ class CardHomeController extends GetxController {
                                   color: AppColors.white,
                                 ),
                                 child:
-                                    SvgPicture.asset(Assets.imagesUploadImage),
+                                    SvgPicture.asset(Assets.cardImagesUploadImage),
                               ),
                               const SizedBox(height: 8),
                               const FittedBox(
