@@ -36,7 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   get_cli: ^1.7.1
   get: ^4.6.1
-  flutter_svg: ^1.0.3
+  flutter_svg: ^0.22.0
   flutter_neumorphic: ^3.2.0
   flutter_staggered_animations: ^1.0.0
   animated_item_picker: ^1.0.4
