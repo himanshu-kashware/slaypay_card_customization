@@ -19,11 +19,8 @@ class SlayPayCustomize extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
-    return MaterialApp(
-      home: CardHomeView(),
-    );
-=======
+
+
     return CardHomeView();
 >>>>>>> parent of 74735eb (changes)
   }
