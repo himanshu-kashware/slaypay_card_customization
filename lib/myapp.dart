@@ -8,12 +8,12 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((_) {
-    runApp(const MyApp());
+    runApp(const SlayPayCustomize());
   });
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class SlayPayCustomize extends StatelessWidget {
+  const SlayPayCustomize({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
