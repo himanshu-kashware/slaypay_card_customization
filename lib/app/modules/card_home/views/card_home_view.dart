@@ -10,11 +10,10 @@ import 'package:slaypay_cc/widget/main_menu_options.dart';
 import '../controllers/card_home_controller.dart';
 
 class CardHomeView extends GetView<CardHomeController> {
-   CardHomeView({Key? key}) : super(key: key);
-
+  const CardHomeView({Key? key}) : super(key: key);
 
   @override
-  final controller=Get.put(CardHomeController());
+  CardHomeController get controller => super.controller;
 
   @override
   Widget build(BuildContext context) {
