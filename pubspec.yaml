@@ -41,6 +41,8 @@ flutter:
   assets:
     - assets/images/
     - assets/images/patterns/
+    - lib/assets/images/
+    - lib/assets/images/patterns/
 
 
   fonts:
