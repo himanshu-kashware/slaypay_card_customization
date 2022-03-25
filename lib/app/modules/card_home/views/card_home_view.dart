@@ -10,10 +10,10 @@ import 'package:slaypay_cc/widget/main_menu_options.dart';
 import '../controllers/card_home_controller.dart';
 
 class CardHomeView extends GetView<CardHomeController> {
-   CardHomeView({Key? key}) : super(key: key);
+  CardHomeView({Key? key}) : super(key: key);
 
   @override
-  final controller=Get.put(CardHomeController());
+  final controller = Get.put(CardHomeController());
 
   @override
   Widget build(BuildContext context) {
@@ -171,18 +171,19 @@ class CardHomeView extends GetView<CardHomeController> {
                               ),
                             )),
                         GestureDetector(
-                            onTap: () {
-                              controller.redo();
-                            },
-                            child: CircleAvatar(
-                              backgroundColor: const Color(0xff6F7FAF),
-                              child: Icon(
-                                Icons.redo,
-                                color: controller.redoList.value.isNotEmpty
-                                    ? Colors.white
-                                    : Colors.white.withOpacity(0.5),
-                              ),
-                            )),
+                          onTap: () {
+                            controller.redo();
+                          },
+                          child: CircleAvatar(
+                            backgroundColor: const Color(0xff6F7FAF),
+                            child: Icon(
+                              Icons.redo,
+                              color: controller.redoList.value.isNotEmpty
+                                  ? Colors.white
+                                  : Colors.white.withOpacity(0.5),
+                            ),
+                          ),
+                        ),
                         GestureDetector(
                             onTap: () {
                               showCustomDialog(onTap: () {
@@ -193,7 +194,8 @@ class CardHomeView extends GetView<CardHomeController> {
                             },
                             child: CircleAvatar(
                                 backgroundColor: const Color(0xff6F7FAF),
-                                child: SvgPicture.asset(Assets.cardImagesRemove))),
+                                child:
+                                    SvgPicture.asset(Assets.cardImagesRemove))),
                         const SizedBox()
                       ],
                     ),

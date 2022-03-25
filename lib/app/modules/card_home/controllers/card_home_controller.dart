@@ -578,7 +578,12 @@ class CardHomeController extends GetxController {
           selectedImage.value = '';
         }
       } catch (e) {}
-      redoList.value.removeLast();
+      try{
+        redoList.value.removeLast();
+      }catch(e){
+
+      }
+
     } else {}
   }
 
