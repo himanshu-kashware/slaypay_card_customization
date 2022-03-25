@@ -24,7 +24,7 @@ List<PatternDetail> getPattern() {
   _list.add( PatternDetail(null, true));
   for (int i = 0; i < 13; i++) {
     PatternDetail _patternData =
-        PatternDetail("assets/images/patterns/p${i}.svg", false);
+        PatternDetail("assets/card_images/patterns/p${i}.svg", false);
     _list.add(_patternData);
   }
 
