@@ -218,7 +218,7 @@ class CardHomeController extends GetxController {
       cardStack.value.insert(0, _pattern);
     }
     isImageEditable(true);
-    Get.back();
+   
   }
 
   //=====================================Add Image ==============================================
@@ -234,7 +234,7 @@ class CardHomeController extends GetxController {
       cardStack.value.insert(0, _pattern);
     }
     isImageEditable(false);
-    Get.back();
+
   }
 
   //==================================================================================
